@@ -79,7 +79,7 @@ export function Hero({ primaryCta }: { primaryCta?: LandingCta }) {
           </a>
 
           <a
-            href="#beam"
+            href="#trust-flow"
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-800 hover:text-black transition-colors"
           >
             <ShieldCheck size={16} className="text-black" />

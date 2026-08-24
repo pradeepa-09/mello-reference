@@ -1,299 +1,280 @@
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { FileText, Mic, Sparkles, Check, CheckCircle2, ChevronRight, Target, Navigation } from "lucide-react";
+"use client";
 
-type MeetingLine = {
+import React, { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Mic, FileText, Activity } from "lucide-react";
+import Image from "next/image";
+
+interface MeetingLine {
   speaker: "You" | "Other";
+  timestamp: string;
   text: string;
   note?: {
-    type: "Decision" | "Next step";
+    type: "Next step" | "Decision";
     title: string;
     detail: string;
   };
-};
+}
 
 const LINES: MeetingLine[] = [
-  { speaker: "You", text: "The desktop experience should stay at the center of this release." },
-  { speaker: "Other", text: "The onboarding walkthrough is nearly ready for review.", note: { type: "Next step", title: "Finish onboarding walkthrough", detail: "Share the final version by Thursday." } },
-  { speaker: "You", text: "Let's keep the launch focused on desktop before expanding the scope.", note: { type: "Decision", title: "Prioritize the desktop launch", detail: "Keep the first release focused and deliberate." } },
-  { speaker: "Other", text: "That gives us enough time to polish the first-run experience." },
-  { speaker: "You", text: "We need the final security review completed before release.", note: { type: "Next step", title: "Complete security review", detail: "Confirm the outcome before launch approval." } },
-  { speaker: "Other", text: "I'll coordinate the review and post the result for the team." },
-  { speaker: "You", text: "Perfect. We can make the release call once those two items are done." },
+  { 
+    speaker: "You", 
+    timestamp: "00:04",
+    text: "The desktop experience should stay at the center of this release." 
+  },
+  { 
+    speaker: "Other", 
+    timestamp: "00:11",
+    text: "The onboarding walkthrough is nearly ready for review.", 
+    note: { 
+      type: "Next step", 
+      title: "Finish onboarding walkthrough", 
+      detail: "Share the final version by Thursday." 
+    } 
+  },
+  { 
+    speaker: "You", 
+    timestamp: "00:18",
+    text: "Let's keep the launch focused on desktop before expanding the scope.", 
+    note: { 
+      type: "Decision", 
+      title: "Prioritize the desktop launch", 
+      detail: "Keep the first release focused and deliberate." 
+    } 
+  },
+  { 
+    speaker: "Other", 
+    timestamp: "00:25",
+    text: "That gives us enough time to polish the first-run experience." 
+  },
+  { 
+    speaker: "You", 
+    timestamp: "00:32",
+    text: "We need the final security review completed before release." 
+  },
 ];
 
-const wait = (milliseconds: number) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
-
 export function MeetingModeAnimation() {
-  const demoRef = useRef<HTMLDivElement>(null);
-  const [hasEnteredView, setHasEnteredView] = useState(false);
-  const [visible, setVisible] = useState<number[]>([]);
-  const [typed, setTyped] = useState<Record<number, number>>({});
-  const [sweeping, setSweeping] = useState<number | null>(null);
-  const [notes, setNotes] = useState<number[]>([]);
-  const [peelingNote, setPeelingNote] = useState<number | null>(null);
-  const [summarized, setSummarized] = useState(false);
-  const [checkedNotes, setCheckedNotes] = useState<Record<number, boolean>>({});
-  const [recapSent, setRecapSent] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(true);
+  const [activeStep, setActiveStep] = useState(0);
 
+  // IntersectionObserver to pause loop when off-screen
   useEffect(() => {
-    const node = demoRef.current;
-    if (!node) return;
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setHasEnteredView(true);
-          observer.disconnect();
-        }
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.28 },
+      { threshold: 0.15 }
     );
 
-    observer.observe(node);
+    observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  const runSimulation = async () => {
-    setVisible([]);
-    setTyped({});
-    setSweeping(null);
-    setNotes([]);
-    setPeelingNote(null);
-    setSummarized(false);
-    setCheckedNotes({});
-    setRecapSent(false);
-
-    let collectedNotes = 0;
-    for (let index = 0; index < LINES.length; index += 1) {
-      setVisible((items) => [...items, index].slice(-6));
-      for (let character = 1; character <= LINES[index].text.length; character += 1) {
-        setTyped((values) => ({ ...values, [index]: character }));
-        await wait(22);
-      }
-      await wait(200);
-
-      if (LINES[index].note) {
-        setSweeping(index);
-        await wait(500);
-        setPeelingNote(index);
-        await wait(200);
-        setNotes((items) => [...items, index]);
-        setSweeping(null);
-        setPeelingNote(null);
-        collectedNotes += 1;
-        if (collectedNotes >= 2) setSummarized(true);
-      }
-      await wait(250);
-    }
-  };
-
+  // Autonomous progressive conversation progression
   useEffect(() => {
-    if (!hasEnteredView) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      setVisible(LINES.map((_, index) => index).slice(-6));
-      setTyped(Object.fromEntries(LINES.map((line, index) => [index, line.text.length])));
-      setNotes(LINES.map((line, index) => (line.note ? index : -1)).filter((index) => index >= 0));
-      setSummarized(true);
-    } else {
-      void runSimulation();
-    }
-  }, [hasEnteredView]);
+    if (reduceMotion || !isInView) return;
 
-  const toggleCheck = (index: number) => {
-    setCheckedNotes((prev) => ({ ...prev, [index]: !prev[index] }));
-  };
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % (LINES.length + 2));
+    }, 2800);
+
+    return () => clearInterval(interval);
+  }, [isInView, reduceMotion]);
+
+  // Current active line index clamped to lines length
+  const currentLineIndex = Math.min(activeStep, LINES.length - 1);
+  const visibleLines = LINES.slice(0, currentLineIndex + 1);
+
+  // Derived notes up to active step
+  const activeNotes = visibleLines.filter((l) => l.note).map((l) => l.note!);
 
   return (
-    <div ref={demoRef} className={`meeting-highlight-demo max-w-4xl mx-auto ${hasEnteredView ? "has-started" : "is-waiting"}`}>
-      
-      {/* Control Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 p-4 bg-[#111] rounded-2xl border border-neutral-800">
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={runSimulation}
-            className="px-4 py-2 bg-white text-black font-extrabold rounded-lg text-xs transition-transform active:scale-95 flex items-center gap-2 hover:bg-neutral-200 cursor-pointer"
-          >
-            <Mic size={14} /> Simulate Live Call
-          </button>
-          <span className="text-xs text-neutral-400 font-medium tracking-wide">Live highlighter sweep · auto note extraction</span>
-        </div>
-        <AnimatePresence>
-          {summarized && (
-            <motion.button
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              type="button"
-              onClick={() => setRecapSent(true)}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
-                recapSent
-                  ? "bg-white text-black"
-                  : "bg-transparent text-white border border-neutral-700 hover:bg-neutral-800"
-              }`}
-            >
-              {recapSent ? (
-                <><CheckCircle2 size={14} /> Email recap sent</>
-              ) : (
-                <>Send Meeting Summary <ChevronRight size={14} /></>
-              )}
-            </motion.button>
-          )}
-        </AnimatePresence>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div ref={containerRef} className="w-full flex flex-col items-center select-none">
+      {/* Outer Card Container Matching Screenshot Exactly */}
+      <div className="w-full max-w-5xl rounded-[32px] border border-neutral-200/90 bg-white shadow-[0_20px_60px_rgba(0,0,0,0.06)] overflow-hidden text-left relative">
         
-        {/* Transcript Panel */}
-        <section className="bg-[#151515] rounded-2xl border border-neutral-800 flex flex-col overflow-hidden">
-          <header className="flex items-center justify-between px-6 py-5 bg-[#111] border-b border-neutral-800">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800">
-                <Mic size={14} className="text-neutral-400" />
-              </div>
-              <div>
-                <strong className="text-sm font-bold text-white tracking-wide block">Active Conversation</strong>
-                <small className="text-[10px] uppercase tracking-widest text-neutral-500 font-semibold block mt-0.5">Live Transcript</small>
-              </div>
+        {/* Top Header Bar */}
+        <div className="flex items-center justify-between px-6 sm:px-8 py-5 border-b border-neutral-100 bg-[#FBFBFB]">
+          {/* Left: Meeting Mode + Title */}
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-black text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Mic size={18} className="text-white" />
             </div>
-            <div className="flex items-end gap-1 h-3">
-              {[8, 12, 6, 10, 5].map((h, i) => (
-                <span key={i} className="w-[3px] rounded-full bg-neutral-600 animate-pulse" style={{ animationDelay: `${i * 0.15}s`, height: `${h}px` }} />
-              ))}
+            <div>
+              <p className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-semibold leading-none mb-1">
+                MEETING MODE
+              </p>
+              <h3 className="text-base sm:text-lg font-bold text-neutral-950 tracking-tight leading-tight">
+                Product launch check-in
+              </h3>
             </div>
-          </header>
-
-          <div className="p-6 space-y-6 flex-1 min-h-[380px]">
-            {visible.map((index) => {
-              const line = LINES[index];
-              const isYou = line.speaker === "You";
-              const isSweeping = sweeping === index;
-              const isPeeling = peelingNote === index;
-              
-              return (
-                <article
-                  key={index}
-                  className={`relative flex flex-col ${isYou ? "items-end" : "items-start"} ${isPeeling ? "meeting-line-peel" : ""}`}
-                >
-                  <div className={`flex items-center gap-2 mb-1.5 px-1 ${isYou ? "flex-row-reverse" : "flex-row"}`}>
-                    <b className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">{line.speaker}</b>
-                    <small className="text-[9px] font-mono text-neutral-600">{`00:${String(index * 7 + 4).padStart(2, "0")}`}</small>
-                  </div>
-                  
-                  <div className={`relative px-4 py-3 max-w-[85%] transition-all ${
-                    isYou 
-                      ? "bg-neutral-800 text-white rounded-xl rounded-tr-sm" 
-                      : "bg-transparent border border-neutral-800 text-neutral-300 rounded-xl rounded-tl-sm"
-                  }`}>
-                    {isSweeping && (
-                      <motion.div
-                         className="absolute inset-0 bg-neutral-100/10 origin-left pointer-events-none rounded-inherit"
-                         style={{ borderRadius: "inherit" }}
-                         initial={{ scaleX: 0 }}
-                         animate={{ scaleX: 1 }}
-                         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      />
-                    )}
-                    <p className="relative z-10 text-xs leading-relaxed font-medium">
-                      {line.text.slice(0, typed[index] || 0)}
-                      {(typed[index] || 0) < line.text.length && (
-                        <i className={`inline-block w-[2px] h-3 ml-0.5 align-middle ${isYou ? "bg-white" : "bg-neutral-500"} animate-pulse`} />
-                      )}
-                    </p>
-                  </div>
-                </article>
-              );
-            })}
           </div>
-        </section>
 
-        {/* Running Summary Panel */}
-        <section className="bg-[#151515] rounded-2xl border border-neutral-800 flex flex-col overflow-hidden">
-          <header className="flex items-center justify-between px-6 py-5 bg-[#111] border-b border-neutral-800">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800">
-                <FileText size={14} className="text-neutral-400" />
-              </div>
-              <div>
-                <strong className="text-sm font-bold text-white tracking-wide block">Running Summary</strong>
-                <small className="text-[10px] uppercase tracking-widest text-neutral-500 font-semibold block mt-0.5">Top-line Notes</small>
-              </div>
-            </div>
-            {notes.length > 0 && (
-              <span className="px-2.5 py-1 border border-neutral-700 rounded-md text-[9px] font-bold text-neutral-400 tracking-widest uppercase">
-                {notes.length} Captured
-              </span>
-            )}
-          </header>
+          {/* Right: Live Status Badge */}
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black text-white text-xs font-mono font-bold shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>LIVE</span>
+          </div>
+        </div>
 
-          <div className="p-6 space-y-3 flex-1 min-h-[380px]">
-            <AnimatePresence>
-              {notes.map((index) => {
-                const note = LINES[index].note!;
-                const isChecked = checkedNotes[index];
-                const isDecision = note.type === "Decision";
-                
-                return (
-                  <motion.article
-                    key={index}
-                    layout
-                    initial={{ opacity: 0, y: 15, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    onClick={() => toggleCheck(index)}
-                    className={`p-4 rounded-xl border cursor-pointer transition-colors duration-200 ${
-                      isChecked
-                        ? "bg-transparent border-neutral-800 opacity-60"
-                        : "bg-[#1a1a1a] border-neutral-700 hover:border-neutral-500"
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className={`mt-0.5 flex items-center justify-center w-[18px] h-[18px] rounded-[4px] border transition-colors ${
-                        isChecked 
-                          ? "bg-white border-white text-black" 
-                          : "bg-transparent border-neutral-600 text-transparent hover:border-neutral-400"
-                      }`}>
-                        <Check size={12} className={isChecked ? "opacity-100" : "opacity-0"} strokeWidth={3} />
-                      </div>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          {isDecision ? (
-                            <Target size={10} className="text-neutral-500" />
-                          ) : (
-                            <Navigation size={10} className="text-neutral-500" />
-                          )}
-                          <small className="text-[9px] font-mono uppercase font-bold tracking-widest text-neutral-500">
-                            {note.type}
-                          </small>
-                        </div>
-                        <strong className={`text-sm font-semibold block mb-1 transition-colors ${isChecked ? "text-neutral-500 line-through" : "text-neutral-200"}`}>
-                          {note.title}
-                        </strong>
-                        <p className="text-xs text-neutral-500 leading-relaxed">
-                          {note.detail}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.article>
-                );
-              })}
-            </AnimatePresence>
-            
-            {notes.length === 0 && (
-              <div className="h-full min-h-[200px] flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-full border border-neutral-800 flex items-center justify-center mb-4">
-                  <Sparkles size={16} className="text-neutral-500" />
+        {/* 2-Column Split Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-neutral-100 bg-white min-h-[480px]">
+          
+          {/* Left Column: Live Transcript (Conversation) */}
+          <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              {/* Header */}
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-neutral-100">
+                <div>
+                  <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 leading-none mb-1">
+                    LIVE TRANSCRIPT
+                  </p>
+                  <h4 className="text-sm sm:text-base font-bold text-neutral-950 tracking-tight">
+                    Conversation
+                  </h4>
                 </div>
-                <p className="text-xs text-neutral-400 font-medium tracking-wide">Waiting for key takeaways...</p>
-                <p className="text-[10px] text-neutral-500 mt-1 max-w-[200px]">Notes will automatically build here as you speak.</p>
+
+                {/* Animated Waveform Icon */}
+                <div className="flex items-center gap-0.5 text-neutral-800">
+                  <span className="w-[3px] h-3 bg-neutral-800 rounded-full animate-pulse" />
+                  <span className="w-[3px] h-4 bg-neutral-800 rounded-full animate-pulse delay-75" />
+                  <span className="w-[3px] h-5 bg-neutral-800 rounded-full animate-pulse delay-150" />
+                  <span className="w-[3px] h-3.5 bg-neutral-800 rounded-full animate-pulse delay-100" />
+                  <span className="w-[3px] h-2 bg-neutral-800 rounded-full animate-pulse" />
+                </div>
               </div>
-            )}
+
+              {/* Messages Stack */}
+              <div className="space-y-3">
+                {visibleLines.map((line, idx) => {
+                  const isCurrent = idx === currentLineIndex;
+
+                  return (
+                    <motion.div
+                      key={line.timestamp}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.28 }}
+                      className={`p-4 rounded-2xl border transition-all duration-300 ${
+                        isCurrent
+                          ? "bg-black text-white border-black shadow-md"
+                          : line.speaker === "Other"
+                          ? "bg-neutral-100/70 border-neutral-200/60 text-neutral-700"
+                          : "bg-white border-neutral-200/80 text-neutral-700"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span
+                          className={`text-xs font-semibold ${
+                            isCurrent ? "text-white" : "text-neutral-900"
+                          }`}
+                        >
+                          {line.speaker}
+                        </span>
+                        <span
+                          className={`text-xs font-mono ${
+                            isCurrent ? "text-neutral-400" : "text-neutral-400"
+                          }`}
+                        >
+                          {line.timestamp}
+                        </span>
+                      </div>
+                      <p
+                        className={`text-xs sm:text-[13px] leading-relaxed ${
+                          isCurrent ? "text-white font-medium" : "text-neutral-600"
+                        }`}
+                      >
+                        {line.text}
+                      </p>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </section>
+
+          {/* Right Column: Meeting Notes (Notebook) */}
+          <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between relative bg-[#FAFAFA]/50">
+            <div>
+              {/* Header */}
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-neutral-100">
+                <div>
+                  <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 leading-none mb-1">
+                    MEETING NOTES
+                  </p>
+                  <h4 className="text-sm sm:text-base font-bold text-neutral-950 tracking-tight">
+                    Notebook
+                  </h4>
+                </div>
+
+                <div className="w-8 h-8 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-700 shadow-2xs">
+                  <FileText size={14} />
+                </div>
+              </div>
+
+              {/* Notes Stack with Thick Black Left Border Accent */}
+              <div className="space-y-3">
+                <AnimatePresence>
+                  {activeNotes.map((note) => (
+                    <motion.div
+                      key={note.title}
+                      initial={{ opacity: 0, scale: 0.96, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                      className="p-4 rounded-2xl bg-white border border-neutral-200 border-l-4 border-l-black shadow-xs text-left"
+                    >
+                      <span className="text-[11px] font-mono font-bold text-black uppercase tracking-wider block mb-1">
+                        {note.type}
+                      </span>
+                      <h5 className="text-sm font-bold text-neutral-950 tracking-tight mb-1">
+                        {note.title}
+                      </h5>
+                      <p className="text-xs text-neutral-500 leading-relaxed">
+                        {note.detail}
+                      </p>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+
+                {activeNotes.length === 0 && (
+                  <div className="p-8 text-center border border-dashed border-neutral-200 rounded-2xl text-neutral-400 text-xs font-mono">
+                    Listening for key decisions &amp; action items…
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Bottom Right: Floating Mello Mascot */}
+            <div className="flex justify-end pt-6 relative">
+              <div className="relative group">
+                <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform overflow-hidden p-2">
+                  <Image
+                    src="/brand/mello-core-icon.png"
+                    alt="Mello Mascot"
+                    width={36}
+                    height={36}
+                    className="object-contain"
+                  />
+                </div>
+                {/* Floor Shadow for Mascot */}
+                <div className="absolute -bottom-2 inset-x-2 h-2 bg-black/20 rounded-full blur-xs pointer-events-none" />
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
     </div>
   );
 }
+
+export default MeetingModeAnimation;

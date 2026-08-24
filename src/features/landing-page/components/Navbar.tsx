@@ -10,26 +10,41 @@ interface NavbarProps {
   primaryCta?: LandingCta;
 }
 
-const NAVBAR_LINKS = [
-  { label: "Actions", href: "#how-it-works" },
+const DEFAULT_NAV_LINKS: LandingNavigationItem[] = [
+  { label: "Actions", href: "#trust-flow" },
   { label: "Meetings", href: "#meeting" },
-  { label: "Memory", href: "#your-mello" },
-  { label: "Personalize", href: "#your-mello" },
+  { label: "Memory", href: "#memory" },
+  { label: "Personalize", href: "#personalize" },
   { label: "Download", href: "#download" },
   { label: "FAQ", href: "#faq" },
 ];
 
-export function Navbar({ primaryCta }: NavbarProps) {
+export function Navbar({ navigation, primaryCta }: NavbarProps) {
   const [open, setOpen] = useState(false);
+  const links = navigation && navigation.length > 0 ? navigation : DEFAULT_NAV_LINKS;
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.pushState(null, "", href);
+      }
+      setOpen(false);
+    }
+  };
 
   return (
-    <header className="fixed top-4 sm:top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-      {/* Floating Pill Container (Matching Image 2) */}
-      <div className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 pl-3 pr-2 py-2 rounded-full bg-[#0E0E0E] border border-neutral-800/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all">
-        {/* Left: Mello Waveform Brand Mark (Pure Transparent) */}
+    <header className="fixed top-3 sm:top-4 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none">
+      {/* Floating Pill Container - Slim, Thinner & Sleek */}
+      <div className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 lg:gap-8 pl-4 sm:pl-5 pr-1.5 sm:pr-2 py-1.5 sm:py-2 rounded-full bg-[#0E0E0E]/95 border border-neutral-800/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-2xl transition-all w-auto max-w-5xl">
+        {/* Left: Mello Brand Mark */}
         <a
           href="#top"
-          className="flex items-center justify-center shrink-0 hover:scale-105 transition-transform px-1.5 py-1 select-none"
+          onClick={(e) => handleNavClick(e, "#top")}
+          className="flex items-center justify-center shrink-0 hover:scale-105 transition-transform py-0.5 select-none pr-1"
           aria-label="Mello Home"
         >
           <Image
@@ -42,13 +57,14 @@ export function Navbar({ primaryCta }: NavbarProps) {
           />
         </a>
 
-        {/* Center: Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-6 px-1" aria-label="Main Navigation">
-          {NAVBAR_LINKS.map((item) => (
+        {/* Center: Spacious Navigation Links */}
+        <nav className="hidden md:flex items-center gap-5 lg:gap-7 xl:gap-8 px-1" aria-label="Main Navigation">
+          {links.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              className="text-xs sm:text-[13px] font-medium text-neutral-400 hover:text-white transition-colors select-none"
+              onClick={(e) => handleNavClick(e, item.href)}
+              className="text-xs sm:text-[12px] font-medium text-neutral-400 hover:text-white transition-colors select-none whitespace-nowrap py-0.5"
             >
               {item.label}
             </a>
@@ -56,35 +72,36 @@ export function Navbar({ primaryCta }: NavbarProps) {
         </nav>
 
         {/* Right: Request Access Button */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           <a
-            href={primaryCta?.href || "#download"}
-            className="inline-flex items-center justify-center text-xs sm:text-[13px] font-semibold px-4 sm:px-5 py-2 rounded-full bg-white text-black hover:bg-neutral-200 active:scale-95 transition-all shadow-xs cursor-pointer"
+            href={primaryCta?.href || "#waitlist"}
+            onClick={(e) => handleNavClick(e, primaryCta?.href || "#waitlist")}
+            className="inline-flex items-center justify-center text-xs sm:text-[12px] font-semibold px-4 sm:px-5 py-1.5 sm:py-1.5 rounded-full bg-white text-black hover:bg-neutral-200 active:scale-95 transition-all shadow-xs cursor-pointer whitespace-nowrap leading-none"
           >
-            Request access
+            {primaryCta?.label || "Request access"}
           </a>
 
           {/* Mobile hamburger button */}
           <button
             type="button"
-            className="lg:hidden p-1.5 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+            className="md:hidden p-1.5 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors ml-1"
             aria-label="Toggle navigation menu"
             aria-expanded={open}
             onClick={() => setOpen(!open)}
           >
-            {open ? <X size={18} /> : <Menu size={18} />}
+            {open ? <X size={16} /> : <Menu size={16} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Dropdown Drawer */}
       {open && (
-        <div className="pointer-events-auto absolute top-16 inset-x-4 max-w-sm mx-auto p-4 rounded-3xl bg-[#0E0E0E] border border-neutral-800 backdrop-blur-2xl shadow-2xl flex flex-col gap-2.5 lg:hidden">
-          {NAVBAR_LINKS.map((item) => (
+        <div className="pointer-events-auto absolute top-16 inset-x-4 max-w-sm mx-auto p-4 rounded-3xl bg-[#0E0E0E] border border-neutral-800 backdrop-blur-2xl shadow-2xl flex flex-col gap-2 md:hidden">
+          {links.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              onClick={() => setOpen(false)}
+              onClick={(e) => handleNavClick(e, item.href)}
               className="text-sm font-medium px-3 py-2 rounded-xl text-neutral-300 hover:text-white hover:bg-neutral-900 transition-colors"
             >
               {item.label}

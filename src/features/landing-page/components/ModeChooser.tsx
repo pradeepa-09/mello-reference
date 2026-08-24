@@ -178,7 +178,7 @@ export function ModeChooser() {
               }}
             >
               <Check className="w-3.5 h-3.5 text-white shrink-0" />
-              <span>Meeting scheduled — Alex Brooks (Tomorrow · 3:00 PM)</span>
+              <span>Meeting scheduled: Alex Brooks (Tomorrow · 3:00 PM)</span>
             </div>
           </div>
         </div>

@@ -50,36 +50,28 @@ function PlatformIcon({ platform }: { platform: string }) {
 
 export function DictationShowcase() {
   return (
-    <section id="dictation" className="py-24 sm:py-32 bg-white text-black border-b border-neutral-200 overflow-hidden">
-      <div className="wrap max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="text-center max-w-3xl mx-auto mb-8">
-          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
-            03 · DICTATION
-          </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
-            Fast, accurate dictation anywhere.
-          </h2>
-          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
-            Transcription fast enough to keep up with natural speech — streaming into any text field on your Mac or Windows desktop.
-          </p>
-        </div>
+    <section id="dictation" className="py-14 sm:py-18 bg-white text-black border-b border-neutral-200 overflow-hidden">
+      <div className="wrap max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          
+          {/* Left Column: Heading and Text */}
+          <div className="lg:col-span-5 text-left flex flex-col justify-center">
+            <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
+              03 · DICTATION
+            </p>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-[1.08]">
+              Fast, accurate dictation anywhere.
+            </h2>
+            <p className="text-neutral-600 text-base sm:text-lg mt-5 leading-relaxed font-normal max-w-md">
+              Speak naturally and Mello turns your words into text in the active field across your desktop.
+            </p>
+          </div>
 
-        {/* 3 Capability Pills Matching 04 Meeting Mode */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs select-none">
-            ~120ms streaming latency
-          </span>
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs select-none">
-            100% on-device AI
-          </span>
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs select-none">
-            Any desktop app
-          </span>
-        </div>
+          {/* Right Column: Dictation Streaming Window Card Demo */}
+          <div className="lg:col-span-7 w-full">
+            <DictationStreamDemo />
+          </div>
 
-        {/* Full-width Spacious Dictation Streaming Demo */}
-        <div className="max-w-4xl mx-auto">
-          <DictationStreamDemo />
         </div>
       </div>
     </section>
@@ -396,30 +388,22 @@ export function ActionsShowcase() {
 
 export function MeetingMode() {
   return (
-    <section id="meeting" className="py-24 sm:py-32 bg-white text-black border-b border-neutral-200">
+    <section id="meeting" className="py-14 sm:py-18 bg-white text-black border-b border-neutral-200">
       <div className="wrap max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="text-left max-w-4xl mb-8 sm:mb-10">
           <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
             04 · MEETING MODE
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">No bot joins your call. Mello is already in your notch.</h2>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
+            No meeting bot. Just Mello on your desktop.
+          </h2>
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
-            Same overlay you use to dictate — not a guest in your meeting. Live transcript, real-time notes, zero friction.
+            Start Meeting Mode when you need it. Mello captures the conversation, keeps your notes together, and prepares a summary when you&apos;re done.
           </p>
         </div>
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs">
-            Same notch
-          </span>
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs">
-            No new app
-          </span>
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs">
-            No bot in your call
-          </span>
-        </div>
+
         <Reveal>
-          <MeetingModeLiveDemo />
+          <MeetingModeAnimation />
         </Reveal>
       </div>
     </section>

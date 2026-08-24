@@ -9,7 +9,7 @@ export function HowMelloWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-24 sm:py-32 px-4 w-full bg-white text-black border-b border-neutral-200 relative overflow-hidden"
+      className="py-14 sm:py-18 px-4 w-full bg-white text-black border-b border-neutral-200 relative overflow-hidden"
     >
       {/* Background ambient lighting */}
       <div
@@ -20,25 +20,28 @@ export function HowMelloWorks() {
         aria-hidden="true"
       />
 
-      <div className="max-w-4xl mx-auto flex flex-col items-center text-center relative z-10">
-        {/* Eyebrow Header */}
-        <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-400 mb-4 select-none">
-          01 · HOW MELLO WORKS
-        </p>
+      <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
+        {/* Eyebrow Header & Headline (Left Aligned) */}
+        <div className="w-full text-left mb-8 sm:mb-10">
+          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-400 mb-3 select-none">
+            01 · HOW MELLO WORKS
+          </p>
 
-        {/* Main Headline */}
-        <h2
-          className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-950 leading-tight max-w-3xl mx-auto mb-16"
-          style={{ letterSpacing: "-0.035em" }}
-        >
-          Speak once. Watch your words become an action.
-        </h2>
+          <h2
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-950 leading-tight max-w-3xl"
+            style={{ letterSpacing: "-0.035em" }}
+          >
+            Speak once. Watch your words become an action.
+          </h2>
+        </div>
 
         {/* Dynamic Multi-Command Detect-and-Scatter Demo */}
-        <ActCommandDemo />
+        <div className="w-full">
+          <ActCommandDemo />
+        </div>
 
-        {/* Minimalist Step Timeline Footer (LISTEN — WRITE — ACT) */}
-        <div className="mt-14 flex items-center justify-center gap-4 select-none">
+        {/* Minimalist Step Timeline Footer (LISTEN — WRITE — ACT) - Centered */}
+        <div className="w-full mt-12 sm:mt-14 flex items-center justify-center gap-4 select-none">
           <button
             type="button"
             onClick={() => setActiveStep(0)}

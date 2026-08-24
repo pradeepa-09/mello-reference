@@ -483,7 +483,7 @@ export function IntegrationsBeamDemo() {
       {/* Background subtle light ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-neutral-100/50 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Dynamic Spoken Voice Command Bar */}
+      {/* Dynamic Spoken Voice Command Bar (Matching Exact Image 1 & 2 Structure) */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentScenario.command}
@@ -491,27 +491,84 @@ export function IntegrationsBeamDemo() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3 }}
-          className="w-full max-w-2xl mb-8 p-4 sm:p-5 rounded-2xl bg-neutral-50 border border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm z-20 text-left"
+          className="w-full max-w-2xl mb-8 rounded-full border border-white/80 bg-[#ECECEC]/95 backdrop-blur-2xl p-2 sm:p-2.5 flex items-center justify-between gap-2.5 sm:gap-4 shadow-[0_12px_36px_rgba(0,0,0,0.14)] z-20 min-h-[58px] sm:min-h-[64px]"
+          style={{
+            boxShadow: isApproved
+              ? "0 16px 40px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+              : "0 12px 36px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)",
+          }}
         >
-          <div className="flex items-center gap-3 text-left w-full sm:w-auto">
-            <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center shrink-0 shadow-md">
-              <Mic size={18} className="animate-pulse text-white" />
+          {/* Left: Solid White MELLO Pill Badge + Dynamic Icon (Mic / Check) */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 pl-1 sm:pl-1.5">
+            <div className="bg-white rounded-full px-3 sm:px-3.5 py-1 sm:py-1.5 shadow-[0_1px_3px_rgba(0,0,0,0.08)] border border-neutral-100 flex flex-col justify-center items-start leading-none">
+              <span className="text-[9px] sm:text-[10px] font-black tracking-[0.14em] text-black uppercase font-mono">
+                MELLO
+              </span>
+              <span className="text-[8px] sm:text-[9px] font-medium text-neutral-500 mt-0.5">
+                Action
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 font-bold">
-                  VOICE COMMAND · {currentScenario.appName.toUpperCase()}
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+
+            {/* Dynamic Mic or Check Icon */}
+            {!isApproved ? (
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.1)] border border-amber-500/20 ring-2 ring-amber-500/10 flex items-center justify-center shrink-0">
+                <Mic className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black animate-pulse" />
               </div>
-              <p className="text-sm sm:text-base font-bold text-black mt-0.5 tracking-tight">
-                {currentScenario.command}
-              </p>
-            </div>
+            ) : (
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shrink-0">
+                <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#2E7D32] stroke-[2.5]" />
+              </div>
+            )}
           </div>
-          <span className="px-2.5 py-1 rounded-full bg-white text-[10px] font-mono text-black border border-neutral-200 font-semibold shrink-0 self-start sm:self-center shadow-xs">
-            {currentScenario.appBadge}
-          </span>
+
+          {/* Center Dynamic Area */}
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1 px-1 sm:px-2">
+            {!isApproved ? (
+              <>
+                {/* Animated Waveform Bars */}
+                <div className="flex items-center gap-[2px] h-5 sm:h-6 shrink-0" aria-hidden="true">
+                  {[6, 14, 22, 12, 26, 18, 10, 20, 8, 16, 12].map((h, i) => (
+                    <motion.span
+                      key={i}
+                      animate={{
+                        height: [`${Math.max(4, h * 0.4)}px`, `${h}px`, `${Math.max(4, h * 0.3)}px`],
+                      }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 0.8,
+                        delay: i * 0.08,
+                        ease: "easeInOut",
+                      }}
+                      className="w-[2px] sm:w-[2.5px] bg-black rounded-full block"
+                    />
+                  ))}
+                </div>
+
+                {/* Listening & Spoken Command Stream */}
+                <span className="font-bold text-xs sm:text-sm text-black tracking-tight leading-snug">
+                  Listening to voice command...
+                </span>
+              </>
+            ) : (
+              /* Resolved Command Text - Fully Visible */
+              <span className="font-semibold text-xs sm:text-sm lg:text-base text-black tracking-tight leading-snug">
+                {currentScenario.command}
+              </span>
+            )}
+          </div>
+
+          {/* Right Status Badge (ACTIVE / DONE) */}
+          <div className="shrink-0 pr-1.5 sm:pr-2 pl-1">
+            {!isApproved ? (
+              <span className="font-black text-[9px] sm:text-[10px] tracking-[0.16em] uppercase text-black font-mono">
+                ACTIVE
+              </span>
+            ) : (
+              <span className="font-black text-[9px] sm:text-[10px] tracking-[0.16em] uppercase text-[#2E7D32] font-mono">
+                DONE
+              </span>
+            )}
+          </div>
         </motion.div>
       </AnimatePresence>
 

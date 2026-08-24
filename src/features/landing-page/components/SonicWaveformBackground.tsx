@@ -3,7 +3,15 @@
 import React, { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 
-export function SonicWaveformBackground() {
+interface SonicWaveformBackgroundProps {
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export function SonicWaveformBackground({
+  className = "",
+  style,
+}: SonicWaveformBackgroundProps) {
   const reduceMotion = useReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +67,7 @@ export function SonicWaveformBackground() {
         // Clear canvas
         ctx.clearRect(0, 0, width, height);
 
-        const centerY = height * 0.28; // Shifted higher up behind the hero headline
+        const centerY = height * 0.46; // Positioned comfortably in the center of the viewport
         const ribbonWidth = width;
 
         for (let i = 0; i < NUM_LINES; i++) {
@@ -126,7 +134,8 @@ export function SonicWaveformBackground() {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 overflow-hidden pointer-events-none z-0"
+      className={`absolute inset-0 overflow-hidden pointer-events-none z-0 ${className}`}
+      style={style}
       aria-hidden="true"
     >
       <canvas ref={canvasRef} className="w-full h-full block" />

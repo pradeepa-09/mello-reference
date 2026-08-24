@@ -50,7 +50,7 @@ const MEETING_SCENARIOS: MeetingScenario[] = [
       "• Security review · Thursday",
     ],
     decision: "Ship on-device speech model for v2.",
-    action: "Elena to finalize QA sign-off by 5 PM.",
+    action: "Other to finalize QA sign-off by 5 PM.",
   },
   {
     id: "design-review",

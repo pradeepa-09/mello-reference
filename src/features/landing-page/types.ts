@@ -38,7 +38,7 @@ export interface DownloadPlatform {
 }
 
 export interface PricingPlan {
-  id: "beta" | "pro";
+  id: "beta" | "pro" | "launch" | string;
   eyebrow: string;
   name: string;
   description: string;

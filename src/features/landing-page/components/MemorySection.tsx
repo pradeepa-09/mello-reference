@@ -181,11 +181,11 @@ export function MemorySection() {
     <section
       id="memory"
       ref={containerRef}
-      className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-white text-black border-b border-neutral-200 relative overflow-hidden"
+      className="py-14 sm:py-18 px-4 sm:px-6 lg:px-8 bg-white text-black border-b border-neutral-200 relative overflow-hidden"
     >
       <div className="wrap max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
-        {/* Section Header Matching 04 Meeting Mode Exactly */}
-        <div className="text-center max-w-3xl mx-auto mb-8">
+        {/* Section Header */}
+        <div className="text-left max-w-4xl mb-6 sm:mb-8">
           <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
             05 · MEMORY
           </p>
@@ -195,19 +195,6 @@ export function MemorySection() {
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
             Mello remembers the facts, people, teams, and preferences you choose to keep, so future requests become faster and more accurate.
           </p>
-        </div>
-
-        {/* 3 Capability Pills Matching 04 Meeting Mode */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs select-none">
-            On-device vault
-          </span>
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs select-none">
-            Zero cloud storage
-          </span>
-          <span className="px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200 text-xs font-bold shadow-xs select-none">
-            Fully editable
-          </span>
         </div>
 
         {/* Animated Dark Card Demo */}

@@ -4,10 +4,10 @@ import React from "react";
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-[#F7F7F7] text-black border-b border-neutral-200/80">
+    <section id="pricing" className="py-14 sm:py-18 px-4 sm:px-6 lg:px-8 bg-[#F7F7F7] text-black border-b border-neutral-200/80">
       <div className="max-w-4xl mx-auto">
-        {/* Section Header Matching 04 Meeting Mode */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        {/* Section Header */}
+        <div className="text-left max-w-4xl mb-8 sm:mb-10">
           <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-400 mb-3 select-none">
             07 · PRICING
           </p>

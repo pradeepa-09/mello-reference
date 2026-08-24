@@ -11,13 +11,11 @@ export const landingPageMock: LandingPageContent = {
   site: {
     primaryCta: { label: "Request access", href: "#waitlist" },
     navigation: [
-      { label: "How it works", href: "#how-it-works" },
-      { label: "Act", href: "#trust-flow" },
-      { label: "Dictate", href: "#dictation" },
+      { label: "Actions", href: "#trust-flow" },
       { label: "Meetings", href: "#meeting" },
       { label: "Memory", href: "#memory" },
       { label: "Personalize", href: "#personalize" },
-      { label: "Pricing", href: "#pricing" },
+      { label: "Download", href: "#download" },
       { label: "FAQ", href: "#faq" },
     ],
     links: {

@@ -274,13 +274,13 @@ export function ShortcutKeyCombos3D() {
           className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white leading-tight"
           style={{ letterSpacing: "var(--tracking-heading-lg)" }}
         >
-          1, 2, or 3-key customizable triggers
+          Choose any shortcut that fits your workflow.
         </h2>
         <p
           className="text-sm sm:text-base mt-3 leading-relaxed font-normal"
           style={{ color: "var(--color-mist)" }}
         >
-          Sculpted 3D tactile keycaps simulating Mello&apos;s instant voice activations.
+          Mello supports customizable 1, 2, or 3-key triggers so it fits naturally into your desktop habits.
         </p>
       </div>
 

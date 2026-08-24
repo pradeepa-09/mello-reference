@@ -1,51 +1,39 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Mic, CheckCircle2, Zap } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
+import { MelloNotchHUD } from "./MelloNotchHUD";
 
 interface DictationSample {
   id: string;
-  topic: string;
-  wpm: number;
+  category: string;
   text: string;
 }
 
 const DICTATION_SAMPLES: DictationSample[] = [
   {
     id: "sample-1",
-    topic: "Engineering Spec",
-    wpm: 168,
-    text: "Let's add the payment error boundaries and verify the retry redirect logic on mobile checkout before deploying to staging tomorrow morning.",
+    category: "PROJECT UPDATE",
+    text: "The confirmation flow is ready for review. We resolved the final interaction details, tightened the copy, and added clear punctuation.",
   },
   {
     id: "sample-2",
-    topic: "Product Feedback",
-    wpm: 174,
+    category: "PRODUCT FEEDBACK",
     text: "The new onboarding flow feels significantly faster. Removing the third configuration step cut down cognitive friction for all new desktop users.",
   },
   {
     id: "sample-3",
-    topic: "Team Message",
-    wpm: 162,
+    category: "TEAM MESSAGE",
     text: "Hey team, thanks for sending over the architecture review. I verified the local latency numbers and pushed the fixes to main branch.",
   },
-  {
-    id: "sample-4",
-    topic: "Brainstorm Note",
-    wpm: 180,
-    text: "Idea for next sprint: allow users to configure global hotkeys for instant hands-free speech-to-text streaming across every active application.",
-  },
 ];
-
-const NUM_BARS = 22;
 
 export function DictationStreamDemo() {
   const reduceMotion = useReducedMotion();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(true);
   const [sampleIndex, setSampleIndex] = useState(0);
-  const [typedChars, setTypedChars] = useState(DICTATION_SAMPLES[0].text.length);
+  const [typedChars, setTypedChars] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const currentSample = DICTATION_SAMPLES[sampleIndex];
@@ -71,15 +59,15 @@ export function DictationStreamDemo() {
   useEffect(() => {
     if (reduceMotion || !isInView) return;
 
+    setTypedChars(0);
+    setIsSpeaking(true);
+
     let charInterval: NodeJS.Timeout | null = null;
     let nextTimer: NodeJS.Timeout | null = null;
     let isCancelled = false;
 
-    // Start streaming from 0 after a short delay on change
     const startTimeout = setTimeout(() => {
       if (isCancelled) return;
-      setTypedChars(0);
-      setIsSpeaking(true);
 
       let charCount = 0;
       charInterval = setInterval(() => {
@@ -97,7 +85,7 @@ export function DictationStreamDemo() {
           }, 3200);
         }
       }, 26);
-    }, 800);
+    }, 400);
 
     return () => {
       isCancelled = true;
@@ -107,144 +95,56 @@ export function DictationStreamDemo() {
     };
   }, [sampleIndex, fullText, isInView, reduceMotion]);
 
-  // Dynamic Audio Waveform during streaming
-  const barHeights = useMemo(() => {
-    return Array.from({ length: NUM_BARS }, (_, i) => {
-      if (isSpeaking) {
-        const centerDistance = Math.abs(i - NUM_BARS / 2) / (NUM_BARS / 2);
-        const baseHeight = 26 - centerDistance * 14;
-        const jitter = ((typedChars * 7 + i * 11) % 10) / 10;
-        return Math.max(4, Math.floor(baseHeight * (0.6 + jitter * 0.6)));
-      }
-      return 4 + (i % 3) * 2;
-    });
-  }, [typedChars, isSpeaking]);
-
   return (
-    <div ref={containerRef} className="w-full flex flex-col items-center">
-      {/* Dictation Streaming Window Card */}
-      <div className="w-full rounded-[28px] border border-neutral-800/90 bg-neutral-950 p-6 sm:p-9 shadow-[0_16px_48px_rgba(0,0,0,0.3)] backdrop-blur-2xl text-left relative overflow-hidden">
-        {/* Window Chrome Header Row */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-neutral-800/90 pb-5 mb-6">
-          {/* Left: macOS Window Controls + Tab Pills */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5 shrink-0">
-              <span className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-              <span className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-              <span className="w-2.5 h-2.5 rounded-full bg-neutral-700" />
-            </div>
-
-            {/* Context Sample Switchers */}
-            <div className="flex flex-wrap gap-1.5">
-              {DICTATION_SAMPLES.map((sample, idx) => {
-                const isActive = idx === sampleIndex;
-                return (
-                  <button
-                    key={sample.id}
-                    type="button"
-                    onClick={() => {
-                      setSampleIndex(idx);
-                      setTypedChars(0);
-                    }}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer select-none ${
-                      isActive
-                        ? "bg-white text-black font-semibold shadow-xs"
-                        : "bg-neutral-900/90 text-neutral-400 hover:text-white hover:bg-neutral-800"
-                    }`}
-                  >
-                    {sample.topic}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Right: Live Status & WPM Indicator */}
-          <div className="flex items-center gap-2 text-xs font-mono">
-            <span
-              className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                isSpeaking ? "bg-emerald-400 animate-pulse" : "bg-neutral-500"
-              }`}
-            />
-            <span className={isSpeaking ? "text-emerald-400 font-semibold" : "text-neutral-400"}>
-              {isSpeaking ? "Listening…" : "Converted"}
-            </span>
-            <span className="px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 font-mono">
-              {currentSample.wpm} WPM
-            </span>
-          </div>
+    <div ref={containerRef} className="w-full flex flex-col items-center select-none relative">
+      {/* Dictation Window Card — Matching Alignment Reference Exactly */}
+      <div className="w-full rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)] text-left relative overflow-hidden flex flex-col justify-between min-h-[340px] sm:min-h-[380px]">
+        
+        {/* Top Window Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
+          <span className="text-xs font-semibold text-neutral-800">
+            Notes
+          </span>
+          <span className="text-xs font-mono text-neutral-400">
+            Edited just now
+          </span>
         </div>
 
-        {/* Body Pad: Spacious Real-time Streaming Speech-to-Text */}
-        <div className="min-h-[220px] sm:min-h-[250px] rounded-2xl bg-neutral-900/60 border border-neutral-800/80 p-6 sm:p-8 mb-6 flex flex-col justify-between relative">
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-[11px] font-mono tracking-widest text-neutral-400 uppercase font-semibold">
-                {currentSample.topic.toUpperCase()}
-              </span>
-              <span className="text-[11px] font-mono text-neutral-500">
-                100% On-Device Neural Engine
-              </span>
-            </div>
+        {/* Note Body with Streaming Text */}
+        <div className="py-6 sm:py-8 flex-1 flex flex-col justify-start">
+          <span className="text-[11px] font-mono font-bold tracking-widest text-neutral-400 uppercase mb-4 block">
+            {currentSample.category}
+          </span>
 
-            <div className="text-lg sm:text-2xl sm:leading-[1.5] text-white font-normal tracking-tight min-h-[140px]">
-              <span>{fullText.slice(0, typedChars)}</span>
-              {isSpeaking && (
-                <span className="inline-block w-2 sm:w-2.5 h-5 sm:h-6 bg-white align-middle ml-1.5 animate-pulse rounded-xs" />
-              )}
-            </div>
-          </div>
-
-          <div className="text-right pt-2">
-            <span className="text-[11px] font-mono text-neutral-500">
-              Streaming into active text caret
-            </span>
-          </div>
-        </div>
-
-        {/* Bottom Bar: Mic + Real-time Audio Waveform + Processing Latency */}
-        <div className="flex items-center justify-between gap-4 pt-1 text-xs font-mono text-neutral-400">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white shrink-0 shadow-xs">
-              <Mic size={16} className={isSpeaking ? "text-white animate-pulse" : "text-neutral-400"} />
-            </div>
-            <div>
-              <p className="text-neutral-200 font-semibold text-xs leading-none">
-                {isSpeaking ? "Dictating with Mello" : "Speech captured"}
-              </p>
-              <p className="text-neutral-500 text-[10px] mt-1 font-mono">
-                Whisper-derived Local LLM
-              </p>
-            </div>
-          </div>
-
-          {/* Audio Waveform Bars (Bursts in sync with speech cadence) */}
-          <div className="flex items-center gap-1 h-7 px-3 bg-neutral-900/60 rounded-full border border-neutral-800/80">
-            {barHeights.map((h, i) => (
-              <motion.span
-                key={i}
-                animate={{ height: `${h}px` }}
-                transition={{ duration: 0.12, ease: "easeInOut" }}
-                className={`w-[2.5px] rounded-full transition-colors ${
-                  isSpeaking ? "bg-white" : "bg-neutral-600"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Processing Latency / Finished State */}
-          <div className="flex items-center gap-1.5 shrink-0 text-right">
-            {isSpeaking ? (
-              <span className="text-neutral-300 text-xs flex items-center gap-1.5 font-mono px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800">
-                <Zap size={13} className="text-neutral-300" /> ~120ms latency
-              </span>
-            ) : (
-              <span className="text-neutral-200 text-xs flex items-center gap-1.5 font-medium px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800">
-                <CheckCircle2 size={13} className="text-emerald-400" /> Done
-              </span>
+          <p className="text-base sm:text-lg sm:leading-relaxed text-neutral-900 font-normal tracking-tight min-h-[80px]">
+            <span>{fullText.slice(0, typedChars)}</span>
+            {isSpeaking && (
+              <span className="inline-block w-1.5 sm:w-2 h-4 sm:h-5 bg-black align-middle ml-1 animate-pulse rounded-xs" />
             )}
-          </div>
+          </p>
         </div>
+
+        {/* Floating Mello Notch HUD Docked at Lower Section */}
+        <div className="w-full flex justify-center py-3">
+          <MelloNotchHUD
+            mode="Dictation"
+            isListening={isSpeaking}
+            transcriptionText={fullText}
+            statusText={isSpeaking ? "ACTIVE" : "DONE"}
+            className="w-full max-w-lg"
+          />
+        </div>
+
+        {/* Bottom Footer Tags */}
+        <div className="flex items-center gap-2 pt-4 border-t border-neutral-100 text-xs font-mono">
+          <span className="px-2.5 py-0.5 rounded-full bg-black text-white font-semibold text-[10px]">
+            Dictation
+          </span>
+          <span className="text-neutral-500 text-[11px]">
+            Speech → text only
+          </span>
+        </div>
+
       </div>
     </div>
   );

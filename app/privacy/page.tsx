@@ -19,12 +19,12 @@ export default function PrivacyPage() {
         title: "Information we collect",
         paragraphs: ["The information Mello processes depends on the features you use and the permissions you choose to grant."],
         items: [
-          "Account information — your name, email address, authentication information, and plan status, when account features are available.",
-          "Voice and transcription data — audio and resulting text processed after you deliberately start Dictation, an Action, or Meeting Mode.",
-          "Action details — the request, resolved details, and action plan needed to prepare an email, calendar event, or GitHub issue for review.",
-          "Personalization and Memory — preferences, Memory, Dictionary entries, and Snippets you choose to save.",
-          "Meeting Mode content — meeting audio, transcripts, notes, and generated summaries when you deliberately use Meeting Mode.",
-          "Device and diagnostic information — basic device, reliability, support, and abuse-prevention data when collected.",
+          "Account information: your name, email address, authentication information, and plan status, when account features are available.",
+          "Voice and transcription data: audio and resulting text processed after you deliberately start Dictation, an Action, or Meeting Mode.",
+          "Action details: the request, resolved details, and action plan needed to prepare an email, calendar event, or GitHub issue for review.",
+          "Personalization and Memory: preferences, Memory, Dictionary entries, and Snippets you choose to save.",
+          "Meeting Mode content: meeting audio, transcripts, notes, and generated summaries when you deliberately use Meeting Mode.",
+          "Device and diagnostic information: basic device, reliability, support, and abuse-prevention data when collected.",
         ],
       },
       {
@@ -50,7 +50,7 @@ export default function PrivacyPage() {
       },
       {
         title: "Sharing and service providers",
-        paragraphs: ["Mello may rely on providers for infrastructure, authentication, transcription or AI processing, diagnostics, support, and—if paid plans are offered—payment processing. Those providers may receive information needed to perform their service. Mello does not present personal information as a product for sale. Information may also be disclosed when required by law, to protect users or the service, or as part of a business transaction subject to appropriate safeguards."],
+        paragraphs: ["Mello may rely on providers for infrastructure, authentication, transcription or AI processing, diagnostics, support, and (if paid plans are offered) payment processing. Those providers may receive information needed to perform their service. Mello does not present personal information as a product for sale. Information may also be disclosed when required by law, to protect users or the service, or as part of a business transaction subject to appropriate safeguards."],
       },
       {
         title: "Legal reasons for processing",

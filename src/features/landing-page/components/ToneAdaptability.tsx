@@ -230,9 +230,9 @@ export function ToneAdaptability() {
             <div className="mt-4 pt-4 border-t flex items-center justify-between text-xs font-mono text-white/50" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
               <span className="flex items-center gap-1.5">
                 <Mic className="w-3.5 h-3.5 text-blue-400" />
-                <span>Whisper Turbo (On-Device)</span>
+                <span>Live Speech</span>
               </span>
-              <span>180 WPM</span>
+              <span>Natural Cadence</span>
             </div>
           </div>
 

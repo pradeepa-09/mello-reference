@@ -2,7 +2,7 @@
 
 import type { LandingPageContent, LandingPageViewModel } from "../types";
 import { Navbar } from "./Navbar";
-import { Hero } from "./Hero";
+import { HeroToHowItWorks } from "@/components/sections/HeroToHowItWorks";
 import { HowMelloWorks } from "./HowMelloWorks";
 import { TrustFlow } from "./TrustFlow";
 import { DictationShowcase, MeetingMode } from "./ProductSections";
@@ -25,8 +25,8 @@ export function LandingPageView({ content }: LandingPageViewProps) {
       <Navbar navigation={content.site.navigation} primaryCta={content.site.primaryCta} />
 
       <main className="bg-white text-black selection:bg-black selection:text-white">
-        {/* 2. Hero — Desktop Notch & Live Interaction */}
-        <Hero primaryCta={content.site.primaryCta} />
+        {/* 2. Hero & Scroll-Scrubbed Transition to How Mello Works */}
+        <HeroToHowItWorks primaryCta={content.site.primaryCta} />
 
         {/* 3. How Mello Works — 3-Step Continuous Voice Parser & Action Executor */}
         <HowMelloWorks />

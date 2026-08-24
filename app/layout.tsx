@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mello — Say it. See the plan. Then let Mello do it.",
+  title: "Mello: Say it. See the plan. Then let Mello do it.",
   description:
     "Visible, reviewable voice actions across Gmail, Google Calendar, and GitHub. Nothing happens until you approve it.",
   icons: {

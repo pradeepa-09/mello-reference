@@ -26,10 +26,10 @@ export default function SecurityPage() {
       {
         title: "How Mello protects your information",
         items: [
-          "Encryption in transit — Production communication uses HTTPS or equivalent encrypted transport supported by the client and service provider.",
-          "Limited internal access — Production access is restricted to authorized people and systems that need it for an operational purpose.",
-          "Secrets outside source code — Service credentials and secrets must not be committed to public application source code.",
-          "Careful diagnostics — Diagnostics should avoid unnecessary user content and be used for reliability, support, abuse prevention, and investigation.",
+          "Encryption in transit: Production communication uses HTTPS or equivalent encrypted transport supported by the client and service provider.",
+          "Limited internal access: Production access is restricted to authorized people and systems that need it for an operational purpose.",
+          "Secrets outside source code: Service credentials and secrets must not be committed to public application source code.",
+          "Careful diagnostics: Diagnostics should avoid unnecessary user content and be used for reliability, support, abuse prevention, and investigation.",
         ],
       },
       {

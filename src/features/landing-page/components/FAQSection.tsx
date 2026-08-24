@@ -56,8 +56,8 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-24 sm:py-32 px-4 max-w-5xl mx-auto border-b border-neutral-200 bg-white text-black">
-      <div className="max-w-3xl mx-auto text-center mb-16">
+    <section id="faq" className="py-14 sm:py-18 px-4 max-w-5xl mx-auto border-b border-neutral-200 bg-white text-black">
+      <div className="max-w-3xl mx-auto text-left mb-8 sm:mb-10">
         <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
           08 · FAQ
         </p>
