@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion, MotionValue } from "framer-motion";
-import { Calendar, Mail, ArrowDown } from "lucide-react";
+import { Calendar, Mail } from "lucide-react";
 
 function GithubOfficialIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -64,7 +64,7 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
   },
   {
     id: "email",
-    pillLabel: "GMAIL",
+    pillLabel: "EMAIL",
     pillIcon: "email",
     youAsked: "Send an email to Sarah asking for the latest design files for the landing page.",
     stepNumber: 1,
@@ -81,31 +81,64 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
 
 interface ActionCardStackDemoProps {
   scrollYProgress?: MotionValue<number>;
-  onSelectIndex?: (index: number) => void;
 }
 
-export function ActionCardStackDemo({ scrollYProgress, onSelectIndex }: ActionCardStackDemoProps) {
+export function ActionCardStackDemo({ scrollYProgress }: ActionCardStackDemoProps) {
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isInView, setIsInView] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const lastScrollIndexRef = useRef(0);
 
-  // Synchronize activeCardIndex strictly from scroll progress
+  // Intersection observer to check if visible
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Update card based on scroll progress when scrolling through the section
   useEffect(() => {
     if (!scrollYProgress) return;
 
     const unsubscribe = scrollYProgress.on("change", (latest) => {
       let nextIndex = 0;
-      if (latest < 0.35) {
+      if (latest < 0.38) {
         nextIndex = 0;
-      } else if (latest < 0.70) {
+      } else if (latest < 0.72) {
         nextIndex = 1;
       } else {
         nextIndex = 2;
       }
-      setActiveIndex((prev) => (prev !== nextIndex ? nextIndex : prev));
+
+      if (nextIndex !== lastScrollIndexRef.current) {
+        lastScrollIndexRef.current = nextIndex;
+        setActiveIndex(nextIndex);
+      }
     });
 
     return () => unsubscribe();
   }, [scrollYProgress]);
+
+  // Gentle auto-cycle timer if user is not actively scrolling
+  useEffect(() => {
+    if (reduceMotion || !isInView) return;
+
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % ACTION_SCENARIOS.length);
+    }, 3200);
+
+    return () => clearInterval(timer);
+  }, [isInView, reduceMotion]);
 
   const renderPillIcon = (icon: "calendar" | "github" | "email") => {
     switch (icon) {
@@ -118,23 +151,22 @@ export function ActionCardStackDemo({ scrollYProgress, onSelectIndex }: ActionCa
     }
   };
 
-  // Cycle to next card manually on click
   const handleCardClick = () => {
-    const next = (activeIndex + 1) % ACTION_SCENARIOS.length;
-    setActiveIndex(next);
-    if (onSelectIndex) onSelectIndex(next);
+    setActiveIndex((prev) => (prev + 1) % ACTION_SCENARIOS.length);
   };
 
   const handleTabClick = (idx: number) => {
     setActiveIndex(idx);
-    if (onSelectIndex) onSelectIndex(idx);
   };
 
   return (
-    <div className="w-full flex flex-col items-center select-none relative pt-4 pb-4 overflow-visible">
+    <div
+      ref={containerRef}
+      className="w-full flex flex-col items-center select-none relative pt-6 pb-2 overflow-visible"
+    >
       {/* 3D Pristine Card Stack Stage */}
       <div
-        className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[510px] sm:min-h-[530px] flex items-center justify-center cursor-pointer"
+        className="relative w-full max-w-[480px] sm:max-w-[500px] mx-auto min-h-[480px] sm:min-h-[500px] flex items-center justify-center cursor-pointer"
         onClick={handleCardClick}
         style={{ perspective: 1200 }}
       >
@@ -169,20 +201,20 @@ export function ActionCardStackDemo({ scrollYProgress, onSelectIndex }: ActionCa
             shadow = "0 30px 80px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.04)";
           } else if (position === 1) {
             // Right Side Peeking Card
-            y = -16;
-            x = 32;
-            z = -35;
-            rotate = 4.5;
-            scale = 0.94;
+            y = -14;
+            x = 28;
+            z = -30;
+            rotate = 4.2;
+            scale = 0.95;
             opacity = 0.88;
             shadow = "0 18px 45px rgba(0,0,0,0.07)";
           } else {
             // Left Side Peeking Card
-            y = -16;
-            x = -32;
-            z = -65;
-            rotate = -4.5;
-            scale = 0.94;
+            y = -14;
+            x = -28;
+            z = -60;
+            rotate = -4.2;
+            scale = 0.95;
             opacity = 0.88;
             shadow = "0 14px 35px rgba(0,0,0,0.06)";
           }
@@ -215,18 +247,18 @@ export function ActionCardStackDemo({ scrollYProgress, onSelectIndex }: ActionCa
                 transformStyle: "preserve-3d",
                 boxShadow: shadow,
               }}
-              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[480px] sm:min-h-[500px]"
+              className="absolute inset-x-0 top-5 rounded-[28px] border border-neutral-200/90 bg-white p-5 sm:p-7 text-left origin-center will-change-transform min-h-[460px] sm:min-h-[480px]"
             >
               {/* Top Floating App Pill Badge — Only rendered on active top card */}
               {isTop && (
-                <motion.div 
+                <motion.div
                   key={`pill-${card.id}`}
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="absolute -top-5 left-7 sm:left-9 z-40"
+                  transition={{ duration: 0.22 }}
+                  className="absolute -top-4 left-6 sm:left-8 z-40"
                 >
-                  <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#111113] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_6px_20px_rgba(0,0,0,0.18)] border border-neutral-800">
+                  <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#111113] text-white font-mono font-bold text-[11px] uppercase tracking-wider shadow-[0_6px_20px_rgba(0,0,0,0.18)] border border-neutral-800">
                     {renderPillIcon(card.pillIcon)}
                     <span>{card.pillLabel}</span>
                   </div>
@@ -239,46 +271,46 @@ export function ActionCardStackDemo({ scrollYProgress, onSelectIndex }: ActionCa
                   key={`content-${card.id}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: 0.05 }}
-                  className="pt-8 sm:pt-9"
+                  transition={{ duration: 0.25, delay: 0.05 }}
+                  className="pt-6 sm:pt-7"
                 >
                   {/* YOU ASKED Header */}
                   <div>
-                    <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2">
+                    <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-1.5">
                       YOU ASKED
                     </span>
-                    <p className="text-sm sm:text-base text-neutral-900 font-normal leading-relaxed min-h-[44px]">
+                    <p className="text-sm sm:text-[15px] text-neutral-900 font-normal leading-relaxed min-h-[42px]">
                       {card.youAsked}
                     </p>
                   </div>
 
                   {/* Separator */}
-                  <div className="h-px w-full bg-neutral-200/80 my-4 sm:my-5" />
+                  <div className="h-px w-full bg-neutral-200/80 my-3.5 sm:my-4" />
 
                   {/* Step Action Row */}
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-6 h-6 rounded-full bg-neutral-950 text-white flex items-center justify-center text-xs font-mono font-bold shrink-0 shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-neutral-950 text-white flex items-center justify-center text-[10px] font-mono font-bold shrink-0 shadow-sm">
                       {card.stepNumber}
                     </div>
-                    <span className="text-sm sm:text-base font-semibold text-neutral-950">
+                    <span className="text-sm sm:text-[15px] font-semibold text-neutral-950">
                       {card.stepTitle}
                     </span>
                   </div>
 
                   {/* Separator */}
-                  <div className="h-px w-full bg-neutral-200/80 my-4 sm:my-5" />
+                  <div className="h-px w-full bg-neutral-200/80 my-3.5 sm:my-4" />
 
                   {/* STRUCTURED DETAILS */}
                   <div>
-                    <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2.5 sm:mb-3">
+                    <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2 sm:mb-2.5">
                       STRUCTURED DETAILS
                     </span>
 
-                    <div className="space-y-2">
+                    <div className="space-y-1.5 sm:space-y-2">
                       {card.details.map((field) => (
                         <div
                           key={field.label}
-                          className="bg-[#FAFAFA] border border-neutral-200/80 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between gap-4 text-xs sm:text-sm"
+                          className="bg-[#FAFAFA] border border-neutral-200/80 rounded-xl px-3 sm:px-3.5 py-1.5 sm:py-2 flex items-center justify-between gap-3 text-xs sm:text-[13px]"
                         >
                           <span className="text-neutral-500 font-normal shrink-0">
                             {field.label}
@@ -293,19 +325,19 @@ export function ActionCardStackDemo({ scrollYProgress, onSelectIndex }: ActionCa
                 </motion.div>
               ) : (
                 /* Clean Blank Silhouette for Left and Right Peeking Cards */
-                <div className="pt-10 opacity-25 select-none pointer-events-none" aria-hidden="true">
-                  <div className="h-2 w-24 bg-neutral-200 rounded mb-4" />
-                  <div className="h-3.5 w-3/4 bg-neutral-100 rounded mb-6" />
-                  <div className="h-px w-full bg-neutral-100 mb-6" />
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-6 h-6 rounded-full bg-neutral-200" />
-                    <div className="h-3 w-40 bg-neutral-200 rounded" />
+                <div className="pt-8 opacity-25 select-none pointer-events-none" aria-hidden="true">
+                  <div className="h-2 w-20 bg-neutral-200 rounded mb-3" />
+                  <div className="h-3 w-3/4 bg-neutral-100 rounded mb-5" />
+                  <div className="h-px w-full bg-neutral-100 mb-5" />
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-5 h-5 rounded-full bg-neutral-200" />
+                    <div className="h-3 w-36 bg-neutral-200 rounded" />
                   </div>
-                  <div className="h-px w-full bg-neutral-100 mb-6" />
-                  <div className="space-y-2.5">
-                    <div className="h-9 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
-                    <div className="h-9 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
-                    <div className="h-9 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
+                  <div className="h-px w-full bg-neutral-100 mb-5" />
+                  <div className="space-y-2">
+                    <div className="h-8 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
+                    <div className="h-8 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
+                    <div className="h-8 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
                   </div>
                 </div>
               )}
@@ -314,34 +346,25 @@ export function ActionCardStackDemo({ scrollYProgress, onSelectIndex }: ActionCa
         })}
       </div>
 
-      {/* Interactive Connector Selector Tabs & Scroll Indicator */}
-      <div className="mt-7 sm:mt-8 flex flex-col items-center gap-3">
-        {/* Connector Pills */}
-        <div className="flex items-center gap-2 p-1.5 rounded-full bg-neutral-100/90 border border-neutral-200/80 shadow-xs">
-          {ACTION_SCENARIOS.map((scenario, idx) => {
-            const isActive = activeIndex === idx;
-            return (
-              <button
-                key={scenario.id}
-                type="button"
-                onClick={() => handleTabClick(idx)}
-                className={`relative px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 flex items-center gap-1.5 ${
-                  isActive
-                    ? "bg-black text-white shadow-sm"
-                    : "text-neutral-600 hover:text-black hover:bg-neutral-200/60"
-                }`}
-              >
-                <span>{scenario.pillLabel}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Subtle Scroll Hint */}
-        <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-neutral-400">
-          <ArrowDown className="w-3 h-3 animate-bounce" />
-          <span>Scroll to cycle actions</span>
-        </div>
+      {/* Interactive Connector Selector Tabs */}
+      <div className="mt-6 sm:mt-7 flex items-center gap-2 p-1.5 rounded-full bg-neutral-100/90 border border-neutral-200/80 shadow-xs">
+        {ACTION_SCENARIOS.map((scenario, idx) => {
+          const isActive = activeIndex === idx;
+          return (
+            <button
+              key={scenario.id}
+              type="button"
+              onClick={() => handleTabClick(idx)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 ${
+                isActive
+                  ? "bg-black text-white shadow-sm"
+                  : "text-neutral-600 hover:text-black hover:bg-neutral-200/60"
+              }`}
+            >
+              <span>{scenario.pillLabel}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
