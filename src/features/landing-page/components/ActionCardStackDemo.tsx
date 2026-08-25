@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Calendar, Mail } from "lucide-react";
+import { Calendar, Mail, Folder } from "lucide-react";
 
 function GithubOfficialIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -26,6 +26,7 @@ interface ActionCardScenario {
   pillLabel: string;
   pillIcon: "calendar" | "github" | "email";
   tabOffsetLeft: string;
+  fileName: string;
   youAsked: string;
   stepNumber: number;
   stepTitle: string;
@@ -38,6 +39,7 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
     pillLabel: "CALENDAR",
     pillIcon: "calendar",
     tabOffsetLeft: "left-6 sm:left-8",
+    fileName: "calendar_event.doc",
     youAsked: "Create a team meeting with Alex tomorrow morning at 10 a.m.",
     stepNumber: 1,
     stepTitle: "Prepare the calendar event",
@@ -54,6 +56,7 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
     pillLabel: "GITHUB",
     pillIcon: "github",
     tabOffsetLeft: "left-28 sm:left-36",
+    fileName: "github_issue.doc",
     youAsked: "Create a GitHub issue for the login redirect bug in the Mello desktop repo.",
     stepNumber: 1,
     stepTitle: "Prepare the GitHub issue",
@@ -70,6 +73,7 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
     pillLabel: "EMAIL",
     pillIcon: "email",
     tabOffsetLeft: "left-52 sm:left-64",
+    fileName: "email_draft.doc",
     youAsked: "Send an email to Sarah asking for the latest design files for the landing page.",
     stepNumber: 1,
     stepTitle: "Prepare the email draft",
@@ -105,7 +109,7 @@ export function ActionCardStackDemo() {
     return () => observer.disconnect();
   }, []);
 
-  // Pop and cycle top card to the back
+  // Pop and cycle top file to the back of the folder
   const popNextCard = () => {
     setDeck((prev) => {
       const [first, ...rest] = prev;
@@ -113,7 +117,7 @@ export function ActionCardStackDemo() {
     });
   };
 
-  // Autonomous Smooth Popping Loop (every 3.6s)
+  // Autonomous Smooth Filing Loop (every 3.6s)
   useEffect(() => {
     if (reduceMotion || !isInView) return;
 
@@ -138,24 +142,21 @@ export function ActionCardStackDemo() {
   return (
     <div
       ref={containerRef}
-      className="w-full flex flex-col items-center select-none relative pt-6 pb-8 overflow-visible"
+      className="w-full flex flex-col items-center select-none relative pt-4 pb-8 overflow-visible"
     >
-      {/* 3D Stack Stage */}
+      {/* File Cabinet Container */}
       <div
-        className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[530px] sm:min-h-[550px] flex items-center justify-center cursor-pointer"
+        className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[540px] sm:min-h-[560px] flex items-center justify-center cursor-pointer"
         onClick={popNextCard}
         style={{ perspective: 1200 }}
       >
-        {/* Soft shadow underneath base of the card stack */}
+        {/* Outer Folder Shadow Base */}
         <div
-          className="absolute inset-x-8 -bottom-4 h-8 bg-neutral-300/40 rounded-[32px] blur-md pointer-events-none transform translate-y-3 scale-95"
+          className="absolute inset-x-6 -bottom-3 h-8 bg-neutral-300/40 rounded-[32px] blur-md pointer-events-none transform translate-y-3 scale-95"
           aria-hidden="true"
         />
 
         {deck.map((card, index) => {
-          // index 0: Front active card (popping in front)
-          // index 1: Middle card (layered behind, peeking right & up)
-          // index 2: Back card (layered furthest back, peeking left & up)
           const isTop = index === 0;
 
           let y = 0;
@@ -164,7 +165,7 @@ export function ActionCardStackDemo() {
           let rotate = 0;
           let scale = 1;
           let opacity = 1;
-          let shadow = "0 30px 80px rgba(0,0,0,0.11), 0 4px 16px rgba(0,0,0,0.04)";
+          let shadow = "0 30px 80px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.03)";
           const zIndex = 30 - index * 10;
 
           if (isTop) {
@@ -174,24 +175,24 @@ export function ActionCardStackDemo() {
             rotate = 0;
             scale = 1;
             opacity = 1;
-            shadow = "0 30px 80px rgba(0,0,0,0.11), 0 4px 16px rgba(0,0,0,0.04)";
+            shadow = "0 30px 80px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.03)";
           } else if (index === 1) {
             y = -14;
-            x = 8;
+            x = 6;
             z = -30;
-            rotate = 2.8;
-            scale = 0.96;
+            rotate = 2.2;
+            scale = 0.97;
             opacity = 0.92;
-            shadow = "0 18px 45px rgba(0,0,0,0.07)";
+            shadow = "0 18px 45px rgba(0,0,0,0.06)";
           } else {
-            // Back card
+            // Back file folder
             y = -28;
-            x = -8;
+            x = -6;
             z = -60;
-            rotate = -3.2;
-            scale = 0.92;
+            rotate = -2.6;
+            scale = 0.93;
             opacity = 0.80;
-            shadow = "0 10px 30px rgba(0,0,0,0.05)";
+            shadow = "0 10px 30px rgba(0,0,0,0.04)";
           }
 
           return (
@@ -226,17 +227,17 @@ export function ActionCardStackDemo() {
                 transformStyle: "preserve-3d",
                 boxShadow: shadow,
               }}
-              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[480px] sm:min-h-[500px]"
+              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[490px] sm:min-h-[510px]"
             >
-              {/* Top Floating App Pill Badge */}
-              <div className={`absolute -top-4 ${card.tabOffsetLeft} z-30 transition-all duration-300`}>
-                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-neutral-950 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_4px_14px_rgba(0,0,0,0.22)] border border-neutral-800">
+              {/* File Folder Top Tab (Appears as a File Document Tab) */}
+              <div className={`absolute -top-4.5 ${card.tabOffsetLeft} z-30 transition-all duration-300`}>
+                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-t-xl rounded-b-md bg-neutral-950 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_4px_14px_rgba(0,0,0,0.22)] border border-neutral-800">
                   {renderPillIcon(card.pillIcon)}
                   <span>{card.pillLabel}</span>
                 </div>
               </div>
 
-              {/* Card Body Content: Only visible on the active front popped card */}
+              {/* File Content: Only visible on top file */}
               {isTop ? (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -245,9 +246,15 @@ export function ActionCardStackDemo() {
                 >
                   {/* YOU ASKED */}
                   <div className="pt-3">
-                    <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2">
-                      YOU ASKED
-                    </span>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400">
+                        YOU ASKED
+                      </span>
+                      <span className="text-[10px] font-mono text-neutral-400 flex items-center gap-1">
+                        <Folder className="w-3 h-3 text-neutral-400" />
+                        {card.fileName}
+                      </span>
+                    </div>
                     <p className="text-sm sm:text-base text-neutral-900 font-normal leading-relaxed min-h-[44px]">
                       {card.youAsked}
                     </p>
@@ -293,8 +300,8 @@ export function ActionCardStackDemo() {
                   </div>
                 </motion.div>
               ) : (
-                /* Clean Blank Silhouette for Stacked Background Cards — No Text Clutter */
-                <div className="pt-6 opacity-30 select-none pointer-events-none" aria-hidden="true">
+                /* Clean Blank Silhouette for File Folder Stack */
+                <div className="pt-6 opacity-25 select-none pointer-events-none" aria-hidden="true">
                   <div className="h-2 w-24 bg-neutral-200 rounded mb-4" />
                   <div className="h-3.5 w-3/4 bg-neutral-100 rounded mb-6" />
                   <div className="h-px w-full bg-neutral-100 mb-6" />
