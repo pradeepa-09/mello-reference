@@ -35,7 +35,7 @@ export function HowMelloWorks() {
           </h2>
 
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
-            Mello reads your voice request, shows the exact actions across your apps, and waits for your confirmation before anything runs.
+            Mello resolves names, dates, accounts, and destinations before anything happens. Review the plan once, then approve, edit, or cancel.
           </p>
         </div>
 
