@@ -107,21 +107,21 @@ export function MeetingModeLiveDemo() {
   const [scenarioIdx, setScenarioIdx] = useState(0);
   const currentScenario = MEETING_SCENARIOS[scenarioIdx];
 
-  // LEFT COLUMN: Natural, slower active speaker cycle (~2.6s per speaker)
+  // LEFT COLUMN: Faster active speaker cycle (~1.3s per speaker)
   const [activeSpeakerIdx, setActiveSpeakerIdx] = useState(0);
 
   useEffect(() => {
     if (reduceMotion || !isInView) return;
     const interval = setInterval(() => {
       setActiveSpeakerIdx((prev) => (prev + 1) % PARTICIPANTS.length);
-    }, 2600);
+    }, 1300);
     return () => clearInterval(interval);
   }, [isInView, reduceMotion]);
 
-  // RIGHT COLUMN: 3-State Morphing Card (8s loop per scenario)
-  // State 0: "Capturing" (0 - 3.0s)
-  // State 1: "Structuring" (3.0 - 5.0s)
-  // State 2: "Summary ready" (5.0 - 8.0s)
+  // RIGHT COLUMN: 3-State Morphing Card (4.6s loop per scenario)
+  // State 0: "Capturing" (0 - 1.5s)
+  // State 1: "Structuring" (1.5 - 2.7s)
+  // State 2: "Summary ready" (2.7 - 4.6s)
   const [cardState, setCardState] = useState<0 | 1 | 2>(0);
   const [structuringStage, setStructuringStage] = useState(0);
 
@@ -137,34 +137,34 @@ export function MeetingModeLiveDemo() {
       setCardState(0);
       setStructuringStage(0);
 
-      // t=3.0s -> Structuring state
+      // t=1.5s -> Structuring state
       timeouts.push(
         setTimeout(() => {
           setCardState(1);
           setStructuringStage(1);
-        }, 3000)
+        }, 1500)
       );
 
-      // t=3.8s -> Structuring line 2 appears
+      // t=2.0s -> Structuring line 2 appears
       timeouts.push(
         setTimeout(() => {
           setStructuringStage(2);
-        }, 3800)
+        }, 2000)
       );
 
-      // t=5.0s -> Summary Ready payoff state
+      // t=2.7s -> Summary Ready payoff state
       timeouts.push(
         setTimeout(() => {
           setCardState(2);
-        }, 5000)
+        }, 2700)
       );
 
-      // t=8.2s -> Loop restart & cycle to next scenario
+      // t=4.6s -> Loop restart & cycle to next scenario
       timeouts.push(
         setTimeout(() => {
           setScenarioIdx((prev) => (prev + 1) % MEETING_SCENARIOS.length);
           startCycle();
-        }, 8200)
+        }, 4600)
       );
     };
 

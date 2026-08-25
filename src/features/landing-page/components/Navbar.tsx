@@ -37,46 +37,48 @@ export function Navbar({ navigation, primaryCta }: NavbarProps) {
   };
 
   return (
-    <header className="fixed top-3 sm:top-4 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none">
-      {/* Floating Pill Container - Slim, Thinner & Sleek */}
-      <div className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 lg:gap-8 pl-4 sm:pl-5 pr-1.5 sm:pr-2 py-1.5 sm:py-2 rounded-full bg-[#0E0E0E]/95 border border-neutral-800/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-2xl transition-all w-auto max-w-5xl">
-        {/* Left: Mello Brand Mark */}
+    <header className="fixed top-3 sm:top-5 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none">
+      {/* Floating Pill Container - Exact Replicated Aesthetic */}
+      <div className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 lg:gap-8 p-1 sm:p-1.5 rounded-full bg-[#121214]/95 border border-white/[0.12] shadow-[0_16px_50px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all w-full max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-[920px]">
+        {/* Left: Circular White Logo Button with Wave */}
         <a
           href="#top"
           onClick={(e) => handleNavClick(e, "#top")}
-          className="flex items-center justify-center shrink-0 hover:scale-105 transition-transform py-0.5 select-none pr-1"
+          className="flex items-center justify-center shrink-0 hover:scale-105 active:scale-95 transition-transform select-none"
           aria-label="Mello Home"
         >
-          <Image
-            src="/brand/mello-inline-logo.png"
-            alt="Mello"
-            width={28}
-            height={10}
-            className="w-auto h-2.5 sm:h-3 object-contain opacity-95"
-            priority
-          />
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm p-1.5">
+            <Image
+              src="/brand/mello-inline-logo-dark.png"
+              alt="Mello"
+              width={24}
+              height={10}
+              className="w-[18px] h-auto object-contain brightness-0"
+              priority
+            />
+          </div>
         </a>
 
         {/* Center: Spacious Navigation Links */}
-        <nav className="hidden md:flex items-center gap-5 lg:gap-7 xl:gap-8 px-1" aria-label="Main Navigation">
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8 xl:gap-10 px-2 justify-center flex-1" aria-label="Main Navigation">
           {links.map((item) => (
             <a
               key={item.label}
               href={item.href}
               onClick={(e) => handleNavClick(e, item.href)}
-              className="text-xs sm:text-[12px] font-medium text-neutral-400 hover:text-white transition-colors select-none whitespace-nowrap py-0.5"
+              className="text-[13px] sm:text-[13.5px] font-medium text-neutral-300 hover:text-white transition-colors select-none whitespace-nowrap py-1"
             >
               {item.label}
             </a>
           ))}
         </nav>
 
-        {/* Right: Request Access Button */}
+        {/* Right: Solid White Pill Request Access Button */}
         <div className="flex items-center gap-1.5 shrink-0">
           <a
             href={primaryCta?.href || "#waitlist"}
             onClick={(e) => handleNavClick(e, primaryCta?.href || "#waitlist")}
-            className="inline-flex items-center justify-center text-xs sm:text-[12px] font-semibold px-4 sm:px-5 py-1.5 sm:py-1.5 rounded-full bg-white text-black hover:bg-neutral-200 active:scale-95 transition-all shadow-xs cursor-pointer whitespace-nowrap leading-none"
+            className="inline-flex items-center justify-center text-[13px] sm:text-[13.5px] font-semibold px-5 sm:px-6 py-2 sm:py-2.5 rounded-full bg-white text-black hover:bg-neutral-100 active:scale-95 transition-all shadow-sm cursor-pointer whitespace-nowrap leading-none"
           >
             {primaryCta?.label || "Request access"}
           </a>
@@ -84,7 +86,7 @@ export function Navbar({ navigation, primaryCta }: NavbarProps) {
           {/* Mobile hamburger button */}
           <button
             type="button"
-            className="md:hidden p-1.5 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors ml-1"
+            className="md:hidden p-2 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors ml-0.5"
             aria-label="Toggle navigation menu"
             aria-expanded={open}
             onClick={() => setOpen(!open)}

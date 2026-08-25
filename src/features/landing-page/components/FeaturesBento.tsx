@@ -20,7 +20,7 @@ export function FeaturesBento() {
     email: {
       title: "Executive Email",
       desc: "Concise, professional bulleted updates with appropriate greetings and sign-offs.",
-      example: "Hi Alex,\n\nFollowing up on Q3 milestones:\n• Core engine shipped\n• Latency down 45%\n\nBest,\nDavid",
+      example: "Hi Atharva,\n\nFollowing up on Q3 milestones:\n• Core engine shipped\n• Latency down 45%\n\nBest,\nDavid",
     },
     raw: {
       title: "Raw Transcript",

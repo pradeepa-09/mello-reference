@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { ActCommandDemo } from "./ActCommandDemo";
 
 export function HowMelloWorks() {
-  const [activeStep, setActiveStep] = useState<0 | 1 | 2>(1);
+  const [activeStep, setActiveStep] = useState<0 | 1 | 2>(0);
 
   return (
     <section
@@ -37,7 +37,7 @@ export function HowMelloWorks() {
 
         {/* Dynamic Multi-Command Detect-and-Scatter Demo */}
         <div className="w-full">
-          <ActCommandDemo />
+          <ActCommandDemo onStepChange={setActiveStep} externalActiveStep={activeStep} />
         </div>
 
         {/* Minimalist Step Timeline Footer (LISTEN — WRITE — ACT) - Centered */}

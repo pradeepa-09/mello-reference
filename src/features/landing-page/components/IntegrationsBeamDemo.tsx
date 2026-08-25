@@ -122,7 +122,7 @@ const SCENARIOS: AppActionScenario[] = [
       {
         iconType: "users",
         label: "ATTENDEES",
-        value: "Alex, Sarah, Core Product",
+        value: "Atharva, Sarah, Core Product",
         detail: "3 team members invited",
         badge: "Auto-Resolved",
       },

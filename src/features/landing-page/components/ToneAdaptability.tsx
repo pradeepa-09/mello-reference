@@ -28,7 +28,7 @@ const TONE_EXAMPLES: Record<ToneType, ToneExample> = {
     label: "Executive Email",
     badge: "Gmail Draft",
     rawVoice: "hey louis um yeah so basically lets hop on a call next tuesday and figure out the roadmap stuff lmk when you are free",
-    formattedOutput: "Dear Louis,\n\nFollowing up on our planning milestones, I propose scheduling a brief sync next Tuesday to finalize the roadmap deliverables. Kindly confirm your availability.\n\nBest regards,\nAlex",
+    formattedOutput: "Dear Louis,\n\nFollowing up on our planning milestones, I propose scheduling a brief sync next Tuesday to finalize the roadmap deliverables. Kindly confirm your availability.\n\nBest regards,\nAtharva",
     targetApp: "Gmail · Q3 Planning",
   },
   legal: {

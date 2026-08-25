@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CalendarDays, Mic, Sparkles, Zap } from "lucide-react";
 
-const COMMAND = "Schedule a call with Alex tomorrow at 3";
+const COMMAND = "Schedule a call with Atharva tomorrow at 3";
 const EVENT = {
-  title: "Call with Alex",
+  title: "Call with Atharva",
   time: "Tomorrow · 3:00 PM",
   duration: "30 min",
 };
@@ -65,9 +65,9 @@ export function ActNotchDemo() {
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">Spoken request</span>
             <span className="rounded-full border border-neutral-700 px-2 py-1 text-[10px] font-semibold text-neutral-300">Review first</span>
           </div>
-          <p className="mt-3 text-sm font-medium leading-relaxed text-white">“Schedule a call with Alex tomorrow at 3 PM.”</p>
+          <p className="mt-3 text-sm font-medium leading-relaxed text-white">“Schedule a call with Atharva tomorrow at 3 PM.”</p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {["Alex", "Tomorrow", "3:00 PM"].map((detail) => (
+            {["Atharva", "Tomorrow", "3:00 PM"].map((detail) => (
               <span key={detail} className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-bold text-black">{detail}</span>
             ))}
           </div>

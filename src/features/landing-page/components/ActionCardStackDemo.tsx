@@ -36,7 +36,7 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
     id: "calendar",
     pillLabel: "CALENDAR",
     pillIcon: "calendar",
-    youAsked: "Create a team meeting with Alex tomorrow morning at 10 a.m.",
+    youAsked: "Create a team meeting with Atharva tomorrow morning at 10 a.m.",
     stepNumber: 1,
     stepTitle: "Prepare the calendar event",
     details: [
@@ -70,7 +70,7 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
     stepNumber: 1,
     stepTitle: "Prepare the email draft",
     details: [
-      { label: "To", value: "sarah@mello.app" },
+      { label: "To", value: "sarah@gmail.com" },
       { label: "Subject", value: "Latest landing page design files" },
       { label: "Attachment", value: "None" },
       { label: "Account", value: "Google Workspace" },
@@ -109,13 +109,13 @@ export function ActionCardStackDemo() {
     });
   };
 
-  // Continuous Slow & Luxurious Card Cycle (every 4.8s)
+  // Fast & Snappy Card Cycle (every 2.6s)
   useEffect(() => {
     if (reduceMotion || !isInView) return;
 
     const timer = setInterval(() => {
       popNextCard();
-    }, 4800);
+    }, 2600);
 
     return () => clearInterval(timer);
   }, [isInView, reduceMotion]);
@@ -210,12 +210,12 @@ export function ActionCardStackDemo() {
               transition={{
                 layout: {
                   type: "spring",
-                  stiffness: 110,
+                  stiffness: 280,
                   damping: 24,
-                  mass: 1.2,
+                  mass: 0.8,
                 },
-                duration: 1.1,
-                ease: [0.22, 1, 0.36, 1],
+                duration: 0.45,
+                ease: [0.16, 1, 0.3, 1],
               }}
               style={{
                 transformStyle: "preserve-3d",
@@ -238,7 +238,7 @@ export function ActionCardStackDemo() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.45, delay: 0.1 }}
+                  transition={{ duration: 0.25, delay: 0.05 }}
                   className="pt-8 sm:pt-9"
                 >
                   {/* YOU ASKED Header */}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChevronRight, CheckCircle2 } from "lucide-react";
 
 function AppleOfficialIcon({ className = "w-6 h-6" }: { className?: string }) {
@@ -20,6 +21,7 @@ function WindowsOfficialIcon({ className = "w-5 h-5" }: { className?: string }) 
 }
 
 export function FinalCtaBanner() {
+  const reduceMotion = useReducedMotion();
   const [macEmail, setMacEmail] = useState("");
   const [macSubmitted, setMacSubmitted] = useState(false);
   const [macSubmitting, setMacSubmitting] = useState(false);
@@ -49,12 +51,18 @@ export function FinalCtaBanner() {
   };
 
   return (
-    <section id="waitlist" className="py-14 sm:py-18 px-4 sm:px-6 lg:px-8 bg-[#F7F7F7] text-black border-b border-neutral-200/80">
+    <section id="waitlist" className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#F7F7F7] text-black border-b border-neutral-200/80 overflow-hidden">
       <div id="download" className="scroll-mt-24" />
       <div id="get-mello" className="scroll-mt-24" />
       <div className="max-w-4xl mx-auto text-left">
-        {/* Section Header */}
-        <div className="text-left max-w-4xl mb-8 sm:mb-10">
+        {/* Section Header with Scroll-In */}
+        <motion.div 
+          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="text-left max-w-4xl mb-8 sm:mb-12"
+        >
           <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-400 mb-3 select-none">
             09 · GET MELLO
           </p>
@@ -64,20 +72,35 @@ export function FinalCtaBanner() {
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
             Mello is currently in private beta. Sign up to join the waitlist and get notified when a slot opens.
           </p>
-        </div>
+        </motion.div>
 
         {/* 2-Card Desktop Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
           {/* Card 1: macOS */}
-          <div className="rounded-[28px] border border-neutral-200/90 bg-white p-8 sm:p-9 flex flex-col justify-between shadow-[0_4px_24px_rgba(0,0,0,0.02)] relative overflow-hidden text-left">
+          <motion.div 
+            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={reduceMotion ? undefined : { 
+              y: -6, 
+              boxShadow: "0 24px 48px -12px rgba(0,0,0,0.08)",
+              borderColor: "rgba(0,0,0,0.2)" 
+            }}
+            className="rounded-[28px] border border-neutral-200/90 bg-white p-8 sm:p-9 flex flex-col justify-between shadow-[0_4px_24px_rgba(0,0,0,0.02)] relative overflow-hidden text-left transition-colors cursor-default"
+          >
             {/* Top Right Decorative Ambient Shape */}
             <div className="w-36 h-36 rounded-full bg-neutral-100/80 absolute -top-10 -right-10 pointer-events-none" />
 
             <div>
-              {/* Icon Squircle */}
-              <div className="w-12 h-12 rounded-2xl bg-neutral-100/90 border border-neutral-200/80 flex items-center justify-center mb-6 relative z-10 shadow-2xs">
+              {/* Icon Squircle with Hover Spin */}
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: -3 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="w-12 h-12 rounded-2xl bg-neutral-100/90 border border-neutral-200/80 flex items-center justify-center mb-6 relative z-10 shadow-2xs cursor-default"
+              >
                 <AppleOfficialIcon className="w-6 h-6 text-black" />
-              </div>
+              </motion.div>
 
               {/* Eyebrow & Title */}
               <p className="text-[10px] font-mono font-semibold uppercase tracking-[0.16em] text-neutral-400 mb-1">
@@ -108,33 +131,50 @@ export function FinalCtaBanner() {
                   value={macEmail}
                   onChange={(e) => setMacEmail(e.target.value)}
                   placeholder="Email for macOS access"
-                  className="w-full px-4 py-3.5 rounded-xl border border-neutral-200/90 bg-white text-xs sm:text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-black mb-3 shadow-2xs"
+                  className="w-full px-4 py-3.5 rounded-xl border border-neutral-200/90 bg-white text-xs sm:text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-black focus:border-black mb-3 shadow-2xs transition-all"
                 />
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={macSubmitting}
-                  className="w-full py-3.5 rounded-xl bg-black text-white text-xs sm:text-sm font-semibold hover:bg-neutral-900 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
+                  className="w-full py-3.5 rounded-xl bg-black text-white text-xs sm:text-sm font-semibold hover:bg-neutral-900 transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
                 >
                   <span className="w-6 h-6 rounded-md bg-white flex items-center justify-center text-black">
                     <AppleOfficialIcon className="w-3.5 h-3.5 text-black" />
                   </span>
                   <span>{macSubmitting ? "Joining…" : "Join macOS waitlist"}</span>
                   <ChevronRight size={14} className="text-neutral-400" />
-                </button>
+                </motion.button>
               </form>
             )}
-          </div>
+          </motion.div>
 
           {/* Card 2: Windows */}
-          <div className="rounded-[28px] border border-neutral-200/90 bg-white p-8 sm:p-9 flex flex-col justify-between shadow-[0_4px_24px_rgba(0,0,0,0.02)] relative overflow-hidden text-left">
+          <motion.div 
+            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={reduceMotion ? undefined : { 
+              y: -6, 
+              boxShadow: "0 24px 48px -12px rgba(0,0,0,0.08)",
+              borderColor: "rgba(0,0,0,0.2)" 
+            }}
+            className="rounded-[28px] border border-neutral-200/90 bg-white p-8 sm:p-9 flex flex-col justify-between shadow-[0_4px_24px_rgba(0,0,0,0.02)] relative overflow-hidden text-left transition-colors cursor-default"
+          >
             {/* Top Right Decorative Ambient Shape */}
             <div className="w-36 h-36 rounded-full bg-neutral-100/80 absolute -top-10 -right-10 pointer-events-none" />
 
             <div>
-              {/* Icon Squircle */}
-              <div className="w-12 h-12 rounded-2xl bg-neutral-100/90 border border-neutral-200/80 flex items-center justify-center mb-6 relative z-10 shadow-2xs">
+              {/* Icon Squircle with Hover Spin */}
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 3 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="w-12 h-12 rounded-2xl bg-neutral-100/90 border border-neutral-200/80 flex items-center justify-center mb-6 relative z-10 shadow-2xs cursor-default"
+              >
                 <WindowsOfficialIcon className="w-5 h-5 text-black" />
-              </div>
+              </motion.div>
 
               {/* Eyebrow & Title */}
               <p className="text-[10px] font-mono font-semibold uppercase tracking-[0.16em] text-neutral-400 mb-1">
@@ -165,22 +205,24 @@ export function FinalCtaBanner() {
                   value={winEmail}
                   onChange={(e) => setWinEmail(e.target.value)}
                   placeholder="Email for Windows access"
-                  className="w-full px-4 py-3.5 rounded-xl border border-neutral-200/90 bg-white text-xs sm:text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-black mb-3 shadow-2xs"
+                  className="w-full px-4 py-3.5 rounded-xl border border-neutral-200/90 bg-white text-xs sm:text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-black focus:border-black mb-3 shadow-2xs transition-all"
                 />
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={winSubmitting}
-                  className="w-full py-3.5 rounded-xl bg-black text-white text-xs sm:text-sm font-semibold hover:bg-neutral-900 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
+                  className="w-full py-3.5 rounded-xl bg-black text-white text-xs sm:text-sm font-semibold hover:bg-neutral-900 transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
                 >
                   <span className="w-6 h-6 rounded-md bg-white flex items-center justify-center text-black">
                     <WindowsOfficialIcon className="w-3.5 h-3.5 text-black" />
                   </span>
                   <span>{winSubmitting ? "Joining…" : "Join Windows waitlist"}</span>
                   <ChevronRight size={14} className="text-neutral-400" />
-                </button>
+                </motion.button>
               </form>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -188,3 +230,4 @@ export function FinalCtaBanner() {
 }
 
 export default FinalCtaBanner;
+

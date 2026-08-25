@@ -58,7 +58,7 @@ const CATEGORIES: MemoryCategory[] = [
     items: [
       {
         title: "Elena Rostova",
-        description: "VP of Product. Reach via Slack #product-leadership or email.",
+        description: "VP of Product. Reach via Gmail (elena@mello.ai) or calendar invite.",
       },
       {
         title: "Marcus Vance",
@@ -181,11 +181,17 @@ export function MemorySection() {
     <section
       id="memory"
       ref={containerRef}
-      className="py-14 sm:py-18 px-4 sm:px-6 lg:px-8 bg-white text-black border-b border-neutral-200 relative overflow-hidden"
+      className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white text-black border-b border-neutral-200 relative overflow-hidden"
     >
       <div className="wrap max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
-        {/* Section Header */}
-        <div className="text-left max-w-4xl mb-6 sm:mb-8">
+        {/* Section Header with Scroll-In */}
+        <motion.div 
+          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="text-left max-w-4xl mb-6 sm:mb-10"
+        >
           <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
             05 · MEMORY
           </p>
@@ -195,10 +201,17 @@ export function MemorySection() {
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
             Mello remembers the facts, people, teams, and preferences you choose to keep, so future requests become faster and more accurate.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Animated Dark Card Demo */}
-        <div className="max-w-4xl mx-auto rounded-[28px] border border-neutral-800/80 bg-neutral-950 p-6 sm:p-8 shadow-[0_16px_48px_rgba(0,0,0,0.25)] relative overflow-hidden text-white">
+        {/* Animated Dark Card Demo with Scroll Entrance */}
+        <motion.div 
+          initial={reduceMotion ? false : { opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          whileHover={reduceMotion ? undefined : { y: -4, boxShadow: "0 24px 60px rgba(0,0,0,0.35)" }}
+          className="max-w-4xl mx-auto rounded-[28px] border border-neutral-800/80 bg-neutral-950 p-6 sm:p-8 shadow-[0_16px_48px_rgba(0,0,0,0.25)] relative overflow-hidden text-white transition-all cursor-default"
+        >
           {/* Tab Row (4 Pills) */}
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pb-6 border-b border-neutral-900">
             {CATEGORIES.map((cat, idx) => {
@@ -295,7 +308,7 @@ export function MemorySection() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

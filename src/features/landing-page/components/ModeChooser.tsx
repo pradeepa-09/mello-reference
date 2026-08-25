@@ -95,7 +95,7 @@ export function ModeChooser() {
             }}
           >
             <div className="flex items-center justify-between text-[10px] font-mono" style={{ color: "var(--color-fog)" }}>
-              <span>SLACK · #PRODUCT</span>
+              <span>GMAIL · DRAFT</span>
               <span>STREAMING</span>
             </div>
             <p className="text-xs sm:text-sm font-mono leading-relaxed" style={{ color: "var(--color-pearl)" }}>
@@ -178,7 +178,7 @@ export function ModeChooser() {
               }}
             >
               <Check className="w-3.5 h-3.5 text-white shrink-0" />
-              <span>Meeting scheduled: Alex Brooks (Tomorrow · 3:00 PM)</span>
+              <span>Meeting scheduled: Atharva (Tomorrow · 3:00 PM)</span>
             </div>
           </div>
         </div>

@@ -56,22 +56,32 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-14 sm:py-18 px-4 max-w-5xl mx-auto border-b border-neutral-200 bg-white text-black">
-      <div className="max-w-3xl mx-auto text-left mb-8 sm:mb-10">
+    <section id="faq" className="py-14 sm:py-20 px-4 max-w-5xl mx-auto border-b border-neutral-200 bg-white text-black overflow-hidden">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-3xl mx-auto text-left mb-8 sm:mb-12"
+      >
         <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
           08 · FAQ
         </p>
         <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
           Frequently Asked Questions
         </h2>
-      </div>
+      </motion.div>
 
       <div className="space-y-3.5 max-w-3xl mx-auto">
         {FAQS.map((faq, idx) => {
           const isOpen = openIndex === idx;
           return (
-            <div
+            <motion.div
               key={faq.id}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ duration: 0.4, delay: idx * 0.04, ease: [0.22, 1, 0.36, 1] }}
               className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
                 isOpen
                   ? "border-black bg-white shadow-md ring-1 ring-black/5"
@@ -136,7 +146,7 @@ export function FAQSection() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           );
         })}
       </div>

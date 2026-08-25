@@ -16,9 +16,9 @@ interface SpeedSample {
 
 const SPEED_SAMPLES: SpeedSample[] = [
   {
-    id: "slack-sync",
+    id: "team-sync",
     category: "TEAM SYNC",
-    text: "“Hey team, the updated checkout flow designs are live in Figma with the new payment error boundaries. Let's sync tomorrow at 10 AM.”",
+    text: "“Hey team, the updated checkout flow fixes are pushed to GitHub with the new payment error boundaries. Let's sync tomorrow at 10 AM.”",
     voiceSeconds: 2.4,
     typingSeconds: 9.8,
     multiplier: 4.1,

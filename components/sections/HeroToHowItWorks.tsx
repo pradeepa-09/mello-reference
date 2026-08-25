@@ -134,18 +134,21 @@ export function HeroToHowItWorks({ primaryCta }: HeroToHowItWorksProps) {
               VOICE ACTIONS YOU APPROVE
             </p>
 
-            {/* Headline Glass Card Frame */}
-            <div className="w-full max-w-3xl rounded-[32px] sm:rounded-[40px] bg-white/75 border border-neutral-200/80 px-6 py-8 sm:px-14 sm:py-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] backdrop-blur-md">
+            {/* Headline Glass Card Frame (Exact 2-Line Reference Match) */}
+            <div className="w-fit max-w-full rounded-[28px] sm:rounded-[38px] md:rounded-[44px] bg-white/95 border border-neutral-200/90 px-7 py-8 sm:px-14 sm:py-12 md:px-18 md:py-14 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.02)] backdrop-blur-xl flex flex-col items-center justify-center text-center mx-auto">
               <h1
-                className="text-4xl sm:text-6xl lg:text-[70px] font-extrabold leading-[1.08] tracking-tight text-black"
+                className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[70px] xl:text-[74px] font-extrabold leading-[1.14] tracking-tight text-neutral-950 text-center flex flex-col items-center"
                 style={{ letterSpacing: "-0.04em" }}
               >
-                Your voice starts it.
-                <br />
-                <span className="underline decoration-black decoration-[4px] underline-offset-[10px]">
-                  Mello
-                </span>{" "}
-                makes it happen.
+                <span className="block whitespace-normal sm:whitespace-nowrap">
+                  Your voice starts it.
+                </span>
+                <span className="block whitespace-normal sm:whitespace-nowrap mt-1 sm:mt-1.5">
+                  <span className="inline-block border-b-[3.5px] sm:border-b-[5px] md:border-b-[6px] border-black pb-0.5 sm:pb-1">
+                    Mello
+                  </span>{" "}
+                  makes it happen.
+                </span>
               </h1>
             </div>
 

@@ -50,12 +50,18 @@ function PlatformIcon({ platform }: { platform: string }) {
 
 export function DictationShowcase() {
   return (
-    <section id="dictation" className="py-14 sm:py-18 bg-white text-black border-b border-neutral-200 overflow-hidden">
+    <section id="dictation" className="py-14 sm:py-20 bg-white text-black border-b border-neutral-200 overflow-hidden">
       <div className="wrap max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           
-          {/* Left Column: Heading and Text */}
-          <div className="lg:col-span-5 text-left flex flex-col justify-center">
+          {/* Left Column: Heading and Text with Scroll Entrance */}
+          <motion.div 
+            initial={{ opacity: 0, x: -25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-5 text-left flex flex-col justify-center"
+          >
             <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
               03 · DICTATION
             </p>
@@ -65,12 +71,18 @@ export function DictationShowcase() {
             <p className="text-neutral-600 text-base sm:text-lg mt-5 leading-relaxed font-normal max-w-md">
               Speak naturally and Mello turns your words into text in the active field across your desktop.
             </p>
-          </div>
+          </motion.div>
 
-          {/* Right Column: Dictation Streaming Window Card Demo */}
-          <div className="lg:col-span-7 w-full">
+          {/* Right Column: Dictation Streaming Window Card Demo with Scroll Entrance */}
+          <motion.div 
+            initial={{ opacity: 0, x: 25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-7 w-full"
+          >
             <DictationStreamDemo />
-          </div>
+          </motion.div>
 
         </div>
       </div>
@@ -388,9 +400,15 @@ export function ActionsShowcase() {
 
 export function MeetingMode() {
   return (
-    <section id="meeting" className="py-14 sm:py-18 bg-white text-black border-b border-neutral-200">
+    <section id="meeting" className="py-14 sm:py-20 bg-white text-black border-b border-neutral-200 overflow-hidden">
       <div className="wrap max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="text-left max-w-4xl mb-8 sm:mb-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="text-left max-w-4xl mb-8 sm:mb-12"
+        >
           <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
             04 · MEETING MODE
           </p>
@@ -400,7 +418,7 @@ export function MeetingMode() {
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
             Start Meeting Mode when you need it. Mello captures the conversation, keeps your notes together, and prepares a summary when you&apos;re done.
           </p>
-        </div>
+        </motion.div>
 
         <Reveal>
           <MeetingModeAnimation />

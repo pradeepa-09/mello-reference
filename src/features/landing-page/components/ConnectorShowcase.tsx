@@ -36,7 +36,7 @@ const dossiers: Dossier[] = [
   {
     id: "calendar",
     name: "Calendar",
-    command: "Create a team meeting with Alex tomorrow morning at 10 a.m.",
+    command: "Create a team meeting with Atharva tomorrow morning at 10 a.m.",
     action: "Prepare the calendar event",
     Icon: CalendarDays,
     rows: [
