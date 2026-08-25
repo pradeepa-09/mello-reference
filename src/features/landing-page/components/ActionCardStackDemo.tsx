@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Calendar, Mail } from "lucide-react";
 
 function GithubOfficialIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -81,14 +81,11 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
 
 export function ActionCardStackDemo() {
   const reduceMotion = useReducedMotion();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isInView, setIsInView] = useState(true);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const scenario = ACTION_SCENARIOS[currentIndex];
-
-  // Pause loop when off-screen
+  // Pause when off-screen
   useEffect(() => {
     const el = containerRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
@@ -104,16 +101,16 @@ export function ActionCardStackDemo() {
     return () => observer.disconnect();
   }, []);
 
-  // Autonomous Card Cycling
+  // Continuous Smooth 3D Shuffle Loop (every 3.8s)
   useEffect(() => {
-    if (reduceMotion || !isInView || isHovered) return;
+    if (reduceMotion || !isInView) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % ACTION_SCENARIOS.length);
-    }, 4600);
+      setActiveIndex((prev) => (prev + 1) % ACTION_SCENARIOS.length);
+    }, 3800);
 
     return () => clearInterval(timer);
-  }, [currentIndex, isInView, isHovered, reduceMotion]);
+  }, [isInView, reduceMotion]);
 
   const renderPillIcon = (icon: "calendar" | "github" | "email") => {
     switch (icon) {
@@ -129,144 +126,136 @@ export function ActionCardStackDemo() {
   return (
     <div
       ref={containerRef}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="w-full flex flex-col items-center select-none relative pt-8 pb-4"
+      className="w-full flex flex-col items-center select-none relative pt-6 pb-6 overflow-visible"
     >
-      {/* Visual Scenario Switcher Tabs */}
-      <div className="flex items-center justify-center gap-2 mb-8 z-20">
-        {ACTION_SCENARIOS.map((item, idx) => {
-          const isActive = idx === currentIndex;
+      {/* 3D Perspective Stage */}
+      <div
+        className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[500px] sm:min-h-[520px] flex items-center justify-center"
+        style={{ perspective: 1200 }}
+      >
+        {ACTION_SCENARIOS.map((card, index) => {
+          // Relative position in deck: 0 = active front, 1 = middle tilted right, 2 = back tilted left
+          const order = (index - activeIndex + ACTION_SCENARIOS.length) % ACTION_SCENARIOS.length;
+
+          // 3D Transforms based on position in stack
+          let zIndex = 30;
+          let y = 0;
+          let scale = 1;
+          let rotateZ = 0;
+          let opacity = 1;
+          let pointerEvents: "auto" | "none" = "auto";
+          let shadow = "0 25px 60px rgba(0,0,0,0.08)";
+
+          if (order === 0) {
+            // Front Card
+            zIndex = 30;
+            y = 0;
+            scale = 1;
+            rotateZ = 0;
+            opacity = 1;
+            pointerEvents = "auto";
+            shadow = "0 28px 70px rgba(0,0,0,0.10)";
+          } else if (order === 1) {
+            // Middle Card (Tilted right & slightly up)
+            zIndex = 20;
+            y = -16;
+            scale = 0.94;
+            rotateZ = 3.5;
+            opacity = 0.72;
+            pointerEvents = "none";
+            shadow = "0 18px 45px rgba(0,0,0,0.06)";
+          } else if (order === 2) {
+            // Back Card (Tilted left & further up)
+            zIndex = 10;
+            y = -30;
+            scale = 0.88;
+            rotateZ = -4.2;
+            opacity = 0.48;
+            pointerEvents = "none";
+            shadow = "0 10px 30px rgba(0,0,0,0.04)";
+          }
+
           return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setCurrentIndex(idx)}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all cursor-pointer ${
-                isActive
-                  ? "bg-black text-white shadow-sm scale-105"
-                  : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-black"
-              }`}
+            <motion.div
+              key={card.id}
+              initial={false}
+              animate={{
+                y,
+                scale,
+                rotateZ,
+                opacity,
+                zIndex,
+              }}
+              transition={{
+                duration: 0.85,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              style={{
+                pointerEvents,
+                transformStyle: "preserve-3d",
+                boxShadow: shadow,
+              }}
+              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform"
             >
-              {renderPillIcon(item.pillIcon)}
-              <span>{item.pillLabel}</span>
-            </button>
+              {/* Top Floating App Pill Badge */}
+              <div className="absolute -top-4 left-6 sm:left-8 z-30">
+                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-neutral-950 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_4px_14px_rgba(0,0,0,0.22)] border border-neutral-800">
+                  {renderPillIcon(card.pillIcon)}
+                  <span>{card.pillLabel}</span>
+                </div>
+              </div>
+
+              {/* YOU ASKED */}
+              <div className="pt-3">
+                <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2">
+                  YOU ASKED
+                </span>
+                <p className="text-sm sm:text-base text-neutral-900 font-normal leading-relaxed min-h-[44px]">
+                  {card.youAsked}
+                </p>
+              </div>
+
+              {/* Separator */}
+              <div className="h-px w-full bg-neutral-200/80 my-4 sm:my-5" />
+
+              {/* Step Action Row */}
+              <div className="flex items-center gap-3.5">
+                <div className="w-6 h-6 rounded-full bg-neutral-950 text-white flex items-center justify-center text-xs font-mono font-bold shrink-0 shadow-sm">
+                  {card.stepNumber}
+                </div>
+                <span className="text-sm sm:text-base font-semibold text-neutral-950">
+                  {card.stepTitle}
+                </span>
+              </div>
+
+              {/* Separator */}
+              <div className="h-px w-full bg-neutral-200/80 my-4 sm:my-5" />
+
+              {/* STRUCTURED DETAILS */}
+              <div>
+                <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2.5 sm:mb-3">
+                  STRUCTURED DETAILS
+                </span>
+
+                <div className="space-y-2">
+                  {card.details.map((field) => (
+                    <div
+                      key={field.label}
+                      className="bg-[#FAFAFA] border border-neutral-200/80 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between gap-4 text-xs sm:text-sm"
+                    >
+                      <span className="text-neutral-500 font-normal shrink-0">
+                        {field.label}
+                      </span>
+                      <span className="text-neutral-950 font-semibold text-right truncate">
+                        {field.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           );
         })}
-      </div>
-
-      {/* Main Stack Container with Subtle Faux Tilted Background Cards */}
-      <div className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[520px] sm:min-h-[540px]">
-        
-        {/* Layer 1 (Back Left Tilted Card) */}
-        <div
-          className="absolute inset-0 rounded-[28px] border border-neutral-200/60 bg-gradient-to-b from-[#FDFDFD] to-[#F7F7F8] shadow-sm transform -rotate-3 -translate-x-3 translate-y-1 pointer-events-none opacity-60"
-          aria-hidden="true"
-        >
-          <div className="w-full h-full p-8 flex flex-col justify-between opacity-30">
-            <div className="space-y-4">
-              <div className="h-2 w-24 bg-neutral-300 rounded" />
-              <div className="h-3 w-4/5 bg-neutral-200 rounded" />
-              <div className="h-px w-full bg-neutral-200" />
-            </div>
-            <div className="space-y-2.5">
-              <div className="h-8 w-full bg-neutral-200/80 rounded-xl" />
-              <div className="h-8 w-full bg-neutral-200/80 rounded-xl" />
-            </div>
-          </div>
-        </div>
-
-        {/* Layer 2 (Back Right Tilted Card) */}
-        <div
-          className="absolute inset-0 rounded-[28px] border border-neutral-200/60 bg-gradient-to-b from-[#FFFFFF] to-[#F8F8F9] shadow-sm transform rotate-3 translate-x-3 translate-y-1 pointer-events-none opacity-70"
-          aria-hidden="true"
-        >
-          <div className="w-full h-full p-8 flex flex-col justify-between opacity-30">
-            <div className="space-y-4">
-              <div className="h-2 w-24 bg-neutral-300 rounded" />
-              <div className="h-3 w-3/4 bg-neutral-200 rounded" />
-              <div className="h-px w-full bg-neutral-200" />
-            </div>
-            <div className="space-y-2.5">
-              <div className="h-8 w-full bg-neutral-200/80 rounded-xl" />
-              <div className="h-8 w-full bg-neutral-200/80 rounded-xl" />
-            </div>
-          </div>
-        </div>
-
-        {/* Layer 3: Interactive Foreground Card with Animated Transitions */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={scenario.id}
-            initial={{ opacity: 0, y: 12, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.98 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 shadow-[0_24px_70px_rgba(0,0,0,0.08)] text-left"
-          >
-            {/* Top Floating App Pill Badge */}
-            <div className="absolute -top-4 left-6 sm:left-8 z-20">
-              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-neutral-950 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_4px_14px_rgba(0,0,0,0.25)] border border-neutral-800">
-                {renderPillIcon(scenario.pillIcon)}
-                <span>{scenario.pillLabel}</span>
-              </div>
-            </div>
-
-            {/* Top: YOU ASKED */}
-            <div className="pt-3">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2">
-                YOU ASKED
-              </span>
-              <p className="text-sm sm:text-base text-neutral-900 font-normal leading-relaxed min-h-[44px]">
-                {scenario.youAsked}
-              </p>
-            </div>
-
-            {/* Separator */}
-            <div className="h-px w-full bg-neutral-200/80 my-5" />
-
-            {/* Middle: Step Action Row */}
-            <div className="flex items-center gap-3.5">
-              <div className="w-6 h-6 rounded-full bg-neutral-950 text-white flex items-center justify-center text-xs font-mono font-bold shrink-0 shadow-sm">
-                {scenario.stepNumber}
-              </div>
-              <span className="text-sm sm:text-base font-semibold text-neutral-950">
-                {scenario.stepTitle}
-              </span>
-            </div>
-
-            {/* Separator */}
-            <div className="h-px w-full bg-neutral-200/80 my-5" />
-
-            {/* Bottom: STRUCTURED DETAILS */}
-            <div>
-              <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-3">
-                STRUCTURED DETAILS
-              </span>
-
-              <div className="space-y-2">
-                {scenario.details.map((field, idx) => (
-                  <motion.div
-                    key={field.label}
-                    initial={{ opacity: 0, x: -4 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.04 + 0.1, duration: 0.25 }}
-                    className="bg-[#FAFAFA] border border-neutral-200/80 rounded-xl px-4 py-2.5 sm:py-3 flex items-center justify-between gap-4 text-xs sm:text-sm"
-                  >
-                    <span className="text-neutral-500 font-normal shrink-0">
-                      {field.label}
-                    </span>
-                    <span className="text-neutral-950 font-semibold text-right truncate">
-                      {field.value}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-          </motion.div>
-        </AnimatePresence>
-
       </div>
     </div>
   );
