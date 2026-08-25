@@ -21,18 +21,22 @@ export function HowMelloWorks() {
       />
 
       <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
-        {/* Eyebrow Header & Headline (Left Aligned) */}
-        <div className="w-full text-left mb-8 sm:mb-10">
-          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-400 mb-3 select-none">
-            01 · HOW MELLO WORKS
+        {/* Eyebrow Header & Headline (Matching Reference Typography Exactly) */}
+        <div className="w-full text-left mb-8 sm:mb-12">
+          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
+            01 · SEE THE PLAN AND APPROVE
           </p>
 
           <h2
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-neutral-950 leading-tight max-w-3xl"
+            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
             style={{ letterSpacing: "-0.035em" }}
           >
-            Speak once. Watch your words become an action.
+            Mello shows <span className="font-extrabold text-black">the plan</span> before it acts.
           </h2>
+
+          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
+            Mello reads your voice request, shows the exact actions across your apps, and waits for your confirmation before anything runs.
+          </p>
         </div>
 
         {/* Dynamic Multi-Command Detect-and-Scatter Demo */}

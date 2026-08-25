@@ -17,13 +17,16 @@ export function PricingSection() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-left max-w-4xl mb-8 sm:mb-12"
         >
-          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-400 mb-3 select-none">
+          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
             07 · PRICING
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
-            Transparent, simple pricing.
+          <h2
+            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            style={{ letterSpacing: "-0.035em" }}
+          >
+            Transparent, <span className="font-extrabold text-black">simple pricing</span>.
           </h2>
-          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
+          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Free during private beta. Simple rates when we launch.
           </p>
         </motion.div>

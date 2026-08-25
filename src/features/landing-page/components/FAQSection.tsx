@@ -67,8 +67,11 @@ export function FAQSection() {
         <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
           08 · FAQ
         </p>
-        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
-          Frequently Asked Questions
+        <h2
+          className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+          style={{ letterSpacing: "-0.035em" }}
+        >
+          Frequently <span className="font-extrabold text-black">Asked Questions</span>
         </h2>
       </motion.div>
 

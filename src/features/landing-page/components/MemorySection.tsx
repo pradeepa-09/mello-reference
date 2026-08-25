@@ -192,13 +192,16 @@ export function MemorySection() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-left max-w-4xl mb-6 sm:mb-10"
         >
-          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
+          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
             05 · MEMORY
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
-            Work gets easier every time you use Mello.
+          <h2
+            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            style={{ letterSpacing: "-0.035em" }}
+          >
+            Work gets easier <span className="font-extrabold text-black">every time you use Mello</span>.
           </h2>
-          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
+          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Mello remembers the facts, people, teams, and preferences you choose to keep, so future requests become faster and more accurate.
           </p>
         </motion.div>

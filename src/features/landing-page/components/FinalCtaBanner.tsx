@@ -63,13 +63,16 @@ export function FinalCtaBanner() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-left max-w-4xl mb-8 sm:mb-12"
         >
-          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-400 mb-3 select-none">
+          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
             09 · GET MELLO
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
-            Bring Mello to your desktop.
+          <h2
+            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            style={{ letterSpacing: "-0.035em" }}
+          >
+            Bring Mello <span className="font-extrabold text-black">to your desktop</span>.
           </h2>
-          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
+          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Mello is currently in private beta. Sign up to join the waitlist and get notified when a slot opens.
           </p>
         </motion.div>

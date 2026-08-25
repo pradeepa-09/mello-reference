@@ -62,11 +62,14 @@ export function DictationShowcase() {
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-5 text-left flex flex-col justify-center"
           >
-            <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
+            <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
               03 · DICTATION
             </p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-[1.08]">
-              Fast, accurate dictation anywhere.
+            <h2
+              className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1]"
+              style={{ letterSpacing: "-0.035em" }}
+            >
+              Fast, accurate <span className="font-extrabold text-black">dictation anywhere</span>.
             </h2>
             <p className="text-neutral-600 text-base sm:text-lg mt-5 leading-relaxed font-normal max-w-md">
               Speak naturally and Mello turns your words into text in the active field across your desktop.
@@ -409,13 +412,16 @@ export function MeetingMode() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-left max-w-4xl mb-8 sm:mb-12"
         >
-          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
+          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
             04 · MEETING MODE
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
-            No meeting bot. Just Mello on your desktop.
+          <h2
+            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            style={{ letterSpacing: "-0.035em" }}
+          >
+            No meeting bot. <span className="font-extrabold text-black">Just Mello on your desktop</span>.
           </h2>
-          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
+          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Start Meeting Mode when you need it. Mello captures the conversation, keeps your notes together, and prepares a summary when you&apos;re done.
           </p>
         </motion.div>

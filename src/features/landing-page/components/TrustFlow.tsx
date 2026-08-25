@@ -23,13 +23,16 @@ export function TrustFlow() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-left max-w-4xl mb-8 sm:mb-12"
         >
-          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-neutral-500 mb-3 select-none">
+          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
             02 · CONNECTED ACTIONS &amp; APPROVAL
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black leading-tight">
-            Every action follows the same approval flow.
+          <h2
+            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            style={{ letterSpacing: "-0.035em" }}
+          >
+            Every action follows the <span className="font-extrabold text-black">same approval flow</span>.
           </h2>
-          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal">
+          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Mello currently supports Actions across Gmail, Google Calendar, and GitHub. Speak naturally, review the resolved details, and approve before anything is created or sent.
           </p>
         </motion.div>
