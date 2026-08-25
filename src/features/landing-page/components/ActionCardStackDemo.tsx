@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Calendar, Mail } from "lucide-react";
+import { motion, useReducedMotion, MotionValue } from "framer-motion";
+import { Calendar, Mail, ArrowDown } from "lucide-react";
 
 function GithubOfficialIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -64,7 +64,7 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
   },
   {
     id: "email",
-    pillLabel: "EMAIL",
+    pillLabel: "GMAIL",
     pillIcon: "email",
     youAsked: "Send an email to Sarah asking for the latest design files for the landing page.",
     stepNumber: 1,
@@ -79,46 +79,33 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
   },
 ];
 
-export function ActionCardStackDemo() {
+interface ActionCardStackDemoProps {
+  scrollYProgress?: MotionValue<number>;
+  onSelectIndex?: (index: number) => void;
+}
+
+export function ActionCardStackDemo({ scrollYProgress, onSelectIndex }: ActionCardStackDemoProps) {
   const reduceMotion = useReducedMotion();
-  const [deck, setDeck] = useState(ACTION_SCENARIOS);
-  const [isInView, setIsInView] = useState(true);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  // Pause when off-screen
+  // Synchronize activeCardIndex strictly from scroll progress
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (!scrollYProgress) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  // Pop and cycle top card to back
-  const popNextCard = () => {
-    setDeck((prev) => {
-      const [first, ...rest] = prev;
-      return [...rest, first];
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      let nextIndex = 0;
+      if (latest < 0.35) {
+        nextIndex = 0;
+      } else if (latest < 0.70) {
+        nextIndex = 1;
+      } else {
+        nextIndex = 2;
+      }
+      setActiveIndex((prev) => (prev !== nextIndex ? nextIndex : prev));
     });
-  };
 
-  // Fast & Snappy Card Cycle (every 2.6s)
-  useEffect(() => {
-    if (reduceMotion || !isInView) return;
-
-    const timer = setInterval(() => {
-      popNextCard();
-    }, 2600);
-
-    return () => clearInterval(timer);
-  }, [isInView, reduceMotion]);
+    return () => unsubscribe();
+  }, [scrollYProgress]);
 
   const renderPillIcon = (icon: "calendar" | "github" | "email") => {
     switch (icon) {
@@ -131,15 +118,24 @@ export function ActionCardStackDemo() {
     }
   };
 
+  // Cycle to next card manually on click
+  const handleCardClick = () => {
+    const next = (activeIndex + 1) % ACTION_SCENARIOS.length;
+    setActiveIndex(next);
+    if (onSelectIndex) onSelectIndex(next);
+  };
+
+  const handleTabClick = (idx: number) => {
+    setActiveIndex(idx);
+    if (onSelectIndex) onSelectIndex(idx);
+  };
+
   return (
-    <div
-      ref={containerRef}
-      className="w-full flex flex-col items-center select-none relative pt-8 pb-8 overflow-visible"
-    >
+    <div className="w-full flex flex-col items-center select-none relative pt-4 pb-4 overflow-visible">
       {/* 3D Pristine Card Stack Stage */}
       <div
-        className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[530px] sm:min-h-[550px] flex items-center justify-center cursor-pointer"
-        onClick={popNextCard}
+        className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[510px] sm:min-h-[530px] flex items-center justify-center cursor-pointer"
+        onClick={handleCardClick}
         style={{ perspective: 1200 }}
       >
         {/* Soft shadow underneath base of the card stack */}
@@ -148,8 +144,10 @@ export function ActionCardStackDemo() {
           aria-hidden="true"
         />
 
-        {deck.map((card, index) => {
-          const isTop = index === 0;
+        {ACTION_SCENARIOS.map((card, index) => {
+          // Relative position in deck: 0 = active, 1 = right background, 2 = left background
+          const position = (index - activeIndex + ACTION_SCENARIOS.length) % ACTION_SCENARIOS.length;
+          const isTop = position === 0;
 
           let y = 0;
           let x = 0;
@@ -158,7 +156,7 @@ export function ActionCardStackDemo() {
           let scale = 1;
           let opacity = 1;
           let shadow = "0 30px 80px rgba(0,0,0,0.11), 0 4px 16px rgba(0,0,0,0.04)";
-          const zIndex = 30 - index * 10;
+          const zIndex = 30 - position * 10;
 
           if (isTop) {
             // Active Center Front Card
@@ -168,23 +166,23 @@ export function ActionCardStackDemo() {
             rotate = 0;
             scale = 1;
             opacity = 1;
-            shadow = "0 30px 80px rgba(0,0,0,0.11), 0 4px 16px rgba(0,0,0,0.04)";
-          } else if (index === 1) {
+            shadow = "0 30px 80px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.04)";
+          } else if (position === 1) {
             // Right Side Peeking Card
             y = -16;
-            x = 28;
-            z = -30;
-            rotate = 4.2;
-            scale = 0.95;
+            x = 32;
+            z = -35;
+            rotate = 4.5;
+            scale = 0.94;
             opacity = 0.88;
             shadow = "0 18px 45px rgba(0,0,0,0.07)";
           } else {
             // Left Side Peeking Card
             y = -16;
-            x = -28;
-            z = -60;
-            rotate = -4.2;
-            scale = 0.95;
+            x = -32;
+            z = -65;
+            rotate = -4.5;
+            scale = 0.94;
             opacity = 0.88;
             shadow = "0 14px 35px rgba(0,0,0,0.06)";
           }
@@ -193,11 +191,7 @@ export function ActionCardStackDemo() {
             <motion.div
               key={card.id}
               layout
-              initial={{
-                y: -36,
-                scale: 0.90,
-                opacity: 0.5,
-              }}
+              initial={reduceMotion ? false : { opacity: 0.6, scale: 0.9 }}
               animate={{
                 y,
                 x,
@@ -211,7 +205,7 @@ export function ActionCardStackDemo() {
                 layout: {
                   type: "spring",
                   stiffness: 280,
-                  damping: 24,
+                  damping: 26,
                   mass: 0.8,
                 },
                 duration: 0.45,
@@ -221,24 +215,31 @@ export function ActionCardStackDemo() {
                 transformStyle: "preserve-3d",
                 boxShadow: shadow,
               }}
-              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[490px] sm:min-h-[510px]"
+              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[480px] sm:min-h-[500px]"
             >
               {/* Top Floating App Pill Badge — Only rendered on active top card */}
               {isTop && (
-                <div className="absolute -top-5 left-7 sm:left-9 z-40 transition-all duration-300">
+                <motion.div 
+                  key={`pill-${card.id}`}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="absolute -top-5 left-7 sm:left-9 z-40"
+                >
                   <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#111113] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_6px_20px_rgba(0,0,0,0.18)] border border-neutral-800">
                     {renderPillIcon(card.pillIcon)}
                     <span>{card.pillLabel}</span>
                   </div>
-                </div>
+                </motion.div>
               )}
 
               {/* Card Body Content */}
               {isTop ? (
                 <motion.div
+                  key={`content-${card.id}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.25, delay: 0.05 }}
+                  transition={{ duration: 0.3, delay: 0.05 }}
                   className="pt-8 sm:pt-9"
                 >
                   {/* YOU ASKED Header */}
@@ -311,6 +312,36 @@ export function ActionCardStackDemo() {
             </motion.div>
           );
         })}
+      </div>
+
+      {/* Interactive Connector Selector Tabs & Scroll Indicator */}
+      <div className="mt-7 sm:mt-8 flex flex-col items-center gap-3">
+        {/* Connector Pills */}
+        <div className="flex items-center gap-2 p-1.5 rounded-full bg-neutral-100/90 border border-neutral-200/80 shadow-xs">
+          {ACTION_SCENARIOS.map((scenario, idx) => {
+            const isActive = activeIndex === idx;
+            return (
+              <button
+                key={scenario.id}
+                type="button"
+                onClick={() => handleTabClick(idx)}
+                className={`relative px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-200 flex items-center gap-1.5 ${
+                  isActive
+                    ? "bg-black text-white shadow-sm"
+                    : "text-neutral-600 hover:text-black hover:bg-neutral-200/60"
+                }`}
+              >
+                <span>{scenario.pillLabel}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Subtle Scroll Hint */}
+        <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-neutral-400">
+          <ArrowDown className="w-3 h-3 animate-bounce" />
+          <span>Scroll to cycle actions</span>
+        </div>
       </div>
     </div>
   );
