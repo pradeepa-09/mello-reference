@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { IntegrationsBeamDemo } from "./IntegrationsBeamDemo";
+import { ActionCardStackDemo } from "./ActionCardStackDemo";
 
 export function TrustFlow() {
   return (
@@ -25,8 +25,8 @@ export function TrustFlow() {
           </p>
         </div>
 
-        {/* Animated Beams Integration Showcase */}
-        <IntegrationsBeamDemo />
+        {/* 3-Card Stack Animation: Calendar, GitHub, Email */}
+        <ActionCardStackDemo />
       </div>
     </section>
   );
