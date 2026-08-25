@@ -124,10 +124,10 @@ export function YourMello() {
             06 · PERSONALIZATION
           </p>
           <h2
-            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-black leading-[1.12] max-w-3xl"
             style={{ letterSpacing: "-0.035em" }}
           >
-            Make Mello <span className="font-extrabold text-black">sound like you</span>.
+            Make Mello sound like you.
           </h2>
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Teach Mello how names, acronyms, and technical terms should be understood. Snippets turn a short trigger into a complete phrase you can reuse.

@@ -196,10 +196,10 @@ export function MemorySection() {
             05 · MEMORY
           </p>
           <h2
-            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-black leading-[1.12] max-w-3xl"
             style={{ letterSpacing: "-0.035em" }}
           >
-            Work gets easier <span className="font-extrabold text-black">every time you use Mello</span>.
+            Work gets easier every time you use Mello.
           </h2>
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Mello remembers the facts, people, teams, and preferences you choose to keep, so future requests become faster and more accurate.

@@ -66,10 +66,10 @@ export function DictationShowcase() {
               03 · DICTATION
             </p>
             <h2
-              className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1]"
+              className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-black leading-[1.12]"
               style={{ letterSpacing: "-0.035em" }}
             >
-              Fast, accurate <span className="font-extrabold text-black">dictation anywhere</span>.
+              Fast, accurate dictation anywhere.
             </h2>
             <p className="text-neutral-600 text-base sm:text-lg mt-5 leading-relaxed font-normal max-w-md">
               Speak naturally and Mello turns your words into text in the active field across your desktop.
@@ -416,10 +416,10 @@ export function MeetingMode() {
             04 · MEETING MODE
           </p>
           <h2
-            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-black leading-[1.12] max-w-3xl"
             style={{ letterSpacing: "-0.035em" }}
           >
-            No meeting bot. <span className="font-extrabold text-black">Just Mello on your desktop</span>.
+            No meeting bot. Just Mello on your desktop.
           </h2>
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Start Meeting Mode when you need it. Mello captures the conversation, keeps your notes together, and prepares a summary when you&apos;re done.

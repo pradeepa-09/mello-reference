@@ -21,10 +21,10 @@ export function PricingSection() {
             07 · PRICING
           </p>
           <h2
-            className="text-3xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-black leading-[1.1] max-w-3xl"
+            className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-black leading-[1.12] max-w-3xl"
             style={{ letterSpacing: "-0.035em" }}
           >
-            Transparent, <span className="font-extrabold text-black">simple pricing</span>.
+            Transparent, simple pricing.
           </h2>
           <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
             Free during private beta. Simple rates when we launch.
