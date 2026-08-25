@@ -157,7 +157,6 @@ export function ActionCardStackDemo() {
           // index 1: Middle card (layered behind, peeking right & up)
           // index 2: Back card (layered furthest back, peeking left & up)
           const isTop = index === 0;
-          const isMiddle = index === 1;
 
           let y = 0;
           let x = 0;
@@ -176,13 +175,13 @@ export function ActionCardStackDemo() {
             scale = 1;
             opacity = 1;
             shadow = "0 30px 80px rgba(0,0,0,0.11), 0 4px 16px rgba(0,0,0,0.04)";
-          } else if (isMiddle) {
+          } else if (index === 1) {
             y = -14;
             x = 8;
             z = -30;
             rotate = 2.8;
             scale = 0.96;
-            opacity = 0.88;
+            opacity = 0.92;
             shadow = "0 18px 45px rgba(0,0,0,0.07)";
           } else {
             // Back card
@@ -191,7 +190,7 @@ export function ActionCardStackDemo() {
             z = -60;
             rotate = -3.2;
             scale = 0.92;
-            opacity = 0.65;
+            opacity = 0.80;
             shadow = "0 10px 30px rgba(0,0,0,0.05)";
           }
 
@@ -227,7 +226,7 @@ export function ActionCardStackDemo() {
                 transformStyle: "preserve-3d",
                 boxShadow: shadow,
               }}
-              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform"
+              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[480px] sm:min-h-[500px]"
             >
               {/* Top Floating App Pill Badge */}
               <div className={`absolute -top-4 ${card.tabOffsetLeft} z-30 transition-all duration-300`}>
@@ -237,54 +236,80 @@ export function ActionCardStackDemo() {
                 </div>
               </div>
 
-              {/* YOU ASKED */}
-              <div className="pt-3">
-                <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2">
-                  YOU ASKED
-                </span>
-                <p className="text-sm sm:text-base text-neutral-900 font-normal leading-relaxed min-h-[44px]">
-                  {card.youAsked}
-                </p>
-              </div>
+              {/* Card Body Content: Only visible on the active front popped card */}
+              {isTop ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.05 }}
+                >
+                  {/* YOU ASKED */}
+                  <div className="pt-3">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2">
+                      YOU ASKED
+                    </span>
+                    <p className="text-sm sm:text-base text-neutral-900 font-normal leading-relaxed min-h-[44px]">
+                      {card.youAsked}
+                    </p>
+                  </div>
 
-              {/* Separator */}
-              <div className="h-px w-full bg-neutral-200/80 my-4 sm:my-5" />
+                  {/* Separator */}
+                  <div className="h-px w-full bg-neutral-200/80 my-4 sm:my-5" />
 
-              {/* Step Action Row */}
-              <div className="flex items-center gap-3.5">
-                <div className="w-6 h-6 rounded-full bg-neutral-950 text-white flex items-center justify-center text-xs font-mono font-bold shrink-0 shadow-sm">
-                  {card.stepNumber}
-                </div>
-                <span className="text-sm sm:text-base font-semibold text-neutral-950">
-                  {card.stepTitle}
-                </span>
-              </div>
-
-              {/* Separator */}
-              <div className="h-px w-full bg-neutral-200/80 my-4 sm:my-5" />
-
-              {/* STRUCTURED DETAILS */}
-              <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2.5 sm:mb-3">
-                  STRUCTURED DETAILS
-                </span>
-
-                <div className="space-y-2">
-                  {card.details.map((field) => (
-                    <div
-                      key={field.label}
-                      className="bg-[#FAFAFA] border border-neutral-200/80 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between gap-4 text-xs sm:text-sm"
-                    >
-                      <span className="text-neutral-500 font-normal shrink-0">
-                        {field.label}
-                      </span>
-                      <span className="text-neutral-950 font-semibold text-right truncate">
-                        {field.value}
-                      </span>
+                  {/* Step Action Row */}
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-6 h-6 rounded-full bg-neutral-950 text-white flex items-center justify-center text-xs font-mono font-bold shrink-0 shadow-sm">
+                      {card.stepNumber}
                     </div>
-                  ))}
+                    <span className="text-sm sm:text-base font-semibold text-neutral-950">
+                      {card.stepTitle}
+                    </span>
+                  </div>
+
+                  {/* Separator */}
+                  <div className="h-px w-full bg-neutral-200/80 my-4 sm:my-5" />
+
+                  {/* STRUCTURED DETAILS */}
+                  <div>
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-neutral-400 block mb-2.5 sm:mb-3">
+                      STRUCTURED DETAILS
+                    </span>
+
+                    <div className="space-y-2">
+                      {card.details.map((field) => (
+                        <div
+                          key={field.label}
+                          className="bg-[#FAFAFA] border border-neutral-200/80 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between gap-4 text-xs sm:text-sm"
+                        >
+                          <span className="text-neutral-500 font-normal shrink-0">
+                            {field.label}
+                          </span>
+                          <span className="text-neutral-950 font-semibold text-right truncate">
+                            {field.value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                /* Clean Blank Silhouette for Stacked Background Cards — No Text Clutter */
+                <div className="pt-6 opacity-30 select-none pointer-events-none" aria-hidden="true">
+                  <div className="h-2 w-24 bg-neutral-200 rounded mb-4" />
+                  <div className="h-3.5 w-3/4 bg-neutral-100 rounded mb-6" />
+                  <div className="h-px w-full bg-neutral-100 mb-6" />
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-6 h-6 rounded-full bg-neutral-200" />
+                    <div className="h-3 w-40 bg-neutral-200 rounded" />
+                  </div>
+                  <div className="h-px w-full bg-neutral-100 mb-6" />
+                  <div className="space-y-2.5">
+                    <div className="h-9 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
+                    <div className="h-9 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
+                    <div className="h-9 w-full bg-neutral-50 border border-neutral-100/80 rounded-xl" />
+                  </div>
                 </div>
-              </div>
+              )}
             </motion.div>
           );
         })}
