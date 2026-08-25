@@ -25,7 +25,6 @@ interface ActionCardScenario {
   id: "calendar" | "github" | "email";
   pillLabel: string;
   pillIcon: "calendar" | "github" | "email";
-  tabOffsetLeft: string;
   youAsked: string;
   stepNumber: number;
   stepTitle: string;
@@ -37,7 +36,6 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
     id: "calendar",
     pillLabel: "CALENDAR",
     pillIcon: "calendar",
-    tabOffsetLeft: "left-6 sm:left-8",
     youAsked: "Create a team meeting with Alex tomorrow morning at 10 a.m.",
     stepNumber: 1,
     stepTitle: "Prepare the calendar event",
@@ -53,7 +51,6 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
     id: "github",
     pillLabel: "GITHUB",
     pillIcon: "github",
-    tabOffsetLeft: "left-28 sm:left-36",
     youAsked: "Create a GitHub issue for the login redirect bug in the Mello desktop repo.",
     stepNumber: 1,
     stepTitle: "Prepare the GitHub issue",
@@ -69,7 +66,6 @@ const ACTION_SCENARIOS: ActionCardScenario[] = [
     id: "email",
     pillLabel: "EMAIL",
     pillIcon: "email",
-    tabOffsetLeft: "left-52 sm:left-64",
     youAsked: "Send an email to Sarah asking for the latest design files for the landing page.",
     stepNumber: 1,
     stepTitle: "Prepare the email draft",
@@ -127,22 +123,22 @@ export function ActionCardStackDemo() {
   const renderPillIcon = (icon: "calendar" | "github" | "email") => {
     switch (icon) {
       case "calendar":
-        return <Calendar className="w-3.5 h-3.5 text-white stroke-[2.2]" />;
+        return <Calendar className="w-4 h-4 text-white stroke-[2.2]" />;
       case "github":
-        return <GithubOfficialIcon className="w-3.5 h-3.5 text-white" />;
+        return <GithubOfficialIcon className="w-4 h-4 text-white" />;
       case "email":
-        return <Mail className="w-3.5 h-3.5 text-white stroke-[2.2]" />;
+        return <Mail className="w-4 h-4 text-white stroke-[2.2]" />;
     }
   };
 
   return (
     <div
       ref={containerRef}
-      className="w-full flex flex-col items-center select-none relative pt-6 pb-8 overflow-visible"
+      className="w-full flex flex-col items-center select-none relative pt-8 pb-8 overflow-visible"
     >
       {/* 3D Pristine Card Stack Stage */}
       <div
-        className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[520px] sm:min-h-[540px] flex items-center justify-center cursor-pointer"
+        className="relative w-full max-w-[480px] sm:max-w-[520px] mx-auto min-h-[530px] sm:min-h-[550px] flex items-center justify-center cursor-pointer"
         onClick={popNextCard}
         style={{ perspective: 1200 }}
       >
@@ -161,7 +157,7 @@ export function ActionCardStackDemo() {
           let rotate = 0;
           let scale = 1;
           let opacity = 1;
-          let shadow = "0 30px 80px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.03)";
+          let shadow = "0 30px 80px rgba(0,0,0,0.11), 0 4px 16px rgba(0,0,0,0.04)";
           const zIndex = 30 - index * 10;
 
           if (isTop) {
@@ -171,23 +167,23 @@ export function ActionCardStackDemo() {
             rotate = 0;
             scale = 1;
             opacity = 1;
-            shadow = "0 30px 80px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.03)";
+            shadow = "0 30px 80px rgba(0,0,0,0.11), 0 4px 16px rgba(0,0,0,0.04)";
           } else if (index === 1) {
-            y = -14;
-            x = 8;
+            y = -16;
+            x = 6;
             z = -30;
-            rotate = 2.8;
+            rotate = 2.5;
             scale = 0.96;
-            opacity = 0.92;
+            opacity = 0.90;
             shadow = "0 18px 45px rgba(0,0,0,0.07)";
           } else {
             // Back card
-            y = -28;
-            x = -8;
+            y = -30;
+            x = -6;
             z = -60;
-            rotate = -3.2;
+            rotate = -2.8;
             scale = 0.92;
-            opacity = 0.80;
+            opacity = 0.75;
             shadow = "0 10px 30px rgba(0,0,0,0.05)";
           }
 
@@ -223,23 +219,23 @@ export function ActionCardStackDemo() {
                 transformStyle: "preserve-3d",
                 boxShadow: shadow,
               }}
-              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[480px] sm:min-h-[500px]"
+              className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[490px] sm:min-h-[510px]"
             >
-              {/* Top Floating App Pill Badge (Positioned Above Card Border without text collision) */}
-              <div className={`absolute -top-4 ${card.tabOffsetLeft} z-40 transition-all duration-300`}>
-                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-neutral-950 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_4px_14px_rgba(0,0,0,0.22)] border border-neutral-800">
+              {/* Top Floating App Pill Badge — Positioned at Signature Top-Left for all 3 cards */}
+              <div className="absolute -top-5 left-7 sm:left-9 z-40 transition-all duration-300">
+                <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#111113] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_6px_20px_rgba(0,0,0,0.18)] border border-neutral-800">
                   {renderPillIcon(card.pillIcon)}
                   <span>{card.pillLabel}</span>
                 </div>
               </div>
 
-              {/* Card Body Content: Clean spacing ensuring badge never overlaps text */}
+              {/* Card Body Content */}
               {isTop ? (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3, delay: 0.05 }}
-                  className="pt-5"
+                  className="pt-8 sm:pt-9"
                 >
                   {/* YOU ASKED Header */}
                   <div>
@@ -291,8 +287,8 @@ export function ActionCardStackDemo() {
                   </div>
                 </motion.div>
               ) : (
-                /* Clean Blank Card Silhouette for Background Deck Layers */
-                <div className="pt-8 opacity-25 select-none pointer-events-none" aria-hidden="true">
+                /* Clean Blank Silhouette for Stacked Background Cards */
+                <div className="pt-10 opacity-25 select-none pointer-events-none" aria-hidden="true">
                   <div className="h-2 w-24 bg-neutral-200 rounded mb-4" />
                   <div className="h-3.5 w-3/4 bg-neutral-100 rounded mb-6" />
                   <div className="h-px w-full bg-neutral-100 mb-6" />
