@@ -221,13 +221,15 @@ export function ActionCardStackDemo() {
               }}
               className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[490px] sm:min-h-[510px]"
             >
-              {/* Top Floating App Pill Badge — Positioned at Signature Top-Left for all 3 cards */}
-              <div className="absolute -top-5 left-7 sm:left-9 z-40 transition-all duration-300">
-                <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#111113] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_6px_20px_rgba(0,0,0,0.18)] border border-neutral-800">
-                  {renderPillIcon(card.pillIcon)}
-                  <span>{card.pillLabel}</span>
+              {/* Top Floating App Pill Badge — Only rendered on top active card */}
+              {isTop && (
+                <div className="absolute -top-5 left-7 sm:left-9 z-40 transition-all duration-300">
+                  <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#111113] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_6px_20px_rgba(0,0,0,0.18)] border border-neutral-800">
+                    {renderPillIcon(card.pillIcon)}
+                    <span>{card.pillLabel}</span>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Card Body Content */}
               {isTop ? (
