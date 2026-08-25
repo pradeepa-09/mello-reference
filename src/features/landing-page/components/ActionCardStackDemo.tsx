@@ -109,13 +109,13 @@ export function ActionCardStackDemo() {
     });
   };
 
-  // Autonomous Smooth Popping Loop (every 3.6s)
+  // Continuous Slow & Luxurious Card Cycle (every 4.8s)
   useEffect(() => {
     if (reduceMotion || !isInView) return;
 
     const timer = setInterval(() => {
       popNextCard();
-    }, 3600);
+    }, 4800);
 
     return () => clearInterval(timer);
   }, [isInView, reduceMotion]);
@@ -161,6 +161,7 @@ export function ActionCardStackDemo() {
           const zIndex = 30 - index * 10;
 
           if (isTop) {
+            // Active Center Front Card
             y = 0;
             x = 0;
             z = 0;
@@ -169,22 +170,23 @@ export function ActionCardStackDemo() {
             opacity = 1;
             shadow = "0 30px 80px rgba(0,0,0,0.11), 0 4px 16px rgba(0,0,0,0.04)";
           } else if (index === 1) {
+            // Right Side Peeking Card
             y = -16;
-            x = 6;
+            x = 28;
             z = -30;
-            rotate = 2.5;
-            scale = 0.96;
-            opacity = 0.90;
+            rotate = 4.2;
+            scale = 0.95;
+            opacity = 0.88;
             shadow = "0 18px 45px rgba(0,0,0,0.07)";
           } else {
-            // Back card
-            y = -30;
-            x = -6;
+            // Left Side Peeking Card
+            y = -16;
+            x = -28;
             z = -60;
-            rotate = -2.8;
-            scale = 0.92;
-            opacity = 0.75;
-            shadow = "0 10px 30px rgba(0,0,0,0.05)";
+            rotate = -4.2;
+            scale = 0.95;
+            opacity = 0.88;
+            shadow = "0 14px 35px rgba(0,0,0,0.06)";
           }
 
           return (
@@ -208,12 +210,12 @@ export function ActionCardStackDemo() {
               transition={{
                 layout: {
                   type: "spring",
-                  stiffness: 280,
+                  stiffness: 110,
                   damping: 24,
-                  mass: 0.9,
+                  mass: 1.2,
                 },
-                duration: 0.65,
-                ease: [0.16, 1, 0.3, 1],
+                duration: 1.1,
+                ease: [0.22, 1, 0.36, 1],
               }}
               style={{
                 transformStyle: "preserve-3d",
@@ -221,7 +223,7 @@ export function ActionCardStackDemo() {
               }}
               className="absolute inset-x-0 top-6 rounded-[28px] border border-neutral-200/90 bg-white p-6 sm:p-8 text-left origin-center will-change-transform min-h-[490px] sm:min-h-[510px]"
             >
-              {/* Top Floating App Pill Badge — Only rendered on top active card */}
+              {/* Top Floating App Pill Badge — Only rendered on active top card */}
               {isTop && (
                 <div className="absolute -top-5 left-7 sm:left-9 z-40 transition-all duration-300">
                   <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#111113] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-[0_6px_20px_rgba(0,0,0,0.18)] border border-neutral-800">
@@ -236,7 +238,7 @@ export function ActionCardStackDemo() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: 0.05 }}
+                  transition={{ duration: 0.45, delay: 0.1 }}
                   className="pt-8 sm:pt-9"
                 >
                   {/* YOU ASKED Header */}
@@ -289,7 +291,7 @@ export function ActionCardStackDemo() {
                   </div>
                 </motion.div>
               ) : (
-                /* Clean Blank Silhouette for Stacked Background Cards */
+                /* Clean Blank Silhouette for Left and Right Peeking Cards */
                 <div className="pt-10 opacity-25 select-none pointer-events-none" aria-hidden="true">
                   <div className="h-2 w-24 bg-neutral-200 rounded mb-4" />
                   <div className="h-3.5 w-3/4 bg-neutral-100 rounded mb-6" />
