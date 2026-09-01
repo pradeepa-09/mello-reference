@@ -57,17 +57,17 @@ export function SonicWaveformBackground({
     observer.observe(container);
 
     let time = 0;
-    const NUM_LINES = 42; // Number of strands forming the dense sonic ribbon
-    const STEP = 8; // Horizontal resolution step in pixels
+    const NUM_LINES = 42; // Number of strands forming the rich, dense acoustic wave
+    const STEP = 8; // Smooth horizontal resolution step
 
     const render = () => {
       if (isVisible) {
-        time += 0.008; // Smooth ambient flow speed
+        time += 0.009; // Smooth living flow cadence
 
         // Clear canvas
         ctx.clearRect(0, 0, width, height);
 
-        const centerY = height * 0.46; // Positioned comfortably in the center of the viewport
+        const centerY = height * 0.44; // Centered directly behind the headline
         const ribbonWidth = width;
 
         for (let i = 0; i < NUM_LINES; i++) {
@@ -75,11 +75,11 @@ export function SonicWaveformBackground({
           const norm = (i / (NUM_LINES - 1)) * 2 - 1;
           const absNorm = Math.abs(norm);
 
-          // Alpha curve: denser in center, fading smoothly toward outer strands
-          const alpha = (0.32 - absNorm * 0.22) * (0.8 + 0.2 * Math.sin(time * 2 + i * 0.15));
+          // Alpha curve: denser in center, subtle toward outer strands
+          const alpha = (0.22 - absNorm * 0.15) * (0.85 + 0.15 * Math.sin(time * 2 + i * 0.15));
 
           ctx.beginPath();
-          ctx.strokeStyle = `rgba(0, 0, 0, ${Math.max(0.04, alpha)})`;
+          ctx.strokeStyle = `rgba(0, 0, 0, ${Math.max(0.015, alpha)})`;
           ctx.lineWidth = 1.1;
 
           let isFirst = true;
@@ -88,24 +88,20 @@ export function SonicWaveformBackground({
             // Horizontal progress normalized [0..1]
             const xNorm = x / ribbonWidth;
 
-            // Envelope window: smooth swell in middle, tapered at left and right edges
+            // Envelope window: smooth full swell in center, tapered at left and right edges
             const envelope = Math.sin(xNorm * Math.PI);
-            const smoothEnv = Math.pow(Math.max(0, envelope), 1.2);
+            const smoothEnv = Math.pow(Math.max(0, envelope), 1.15);
 
-            // Primary carrier wave
-            const wave1 = Math.sin(xNorm * 4.5 + time * 1.4) * 55;
+            // Primary carrier wave (large live amplitude)
+            const wave1 = Math.sin(xNorm * 4.5 + time * 1.4) * 65;
 
             // Secondary undulating harmonic wave
-            const wave2 = Math.sin(xNorm * 7.2 - time * 1.1 + norm * 0.8) * 32;
+            const wave2 = Math.sin(xNorm * 7.2 - time * 1.1 + norm * 0.8) * 36;
 
-            // Micro turbulence / acoustic vibration
-            const wave3 = Math.cos(xNorm * 11.5 + time * 2.2 + i * 0.05) * 12;
+            // Tertiary acoustic ripple
+            const wave3 = Math.cos(xNorm * 11.5 + time * 1.6 + norm * 0.5) * 18;
 
-            // Ribbon spread / thickness modulation across strands
-            const ribbonSpread = (norm * 75 + Math.sin(xNorm * 3.8 + time + norm * 1.2) * 28) * smoothEnv;
-
-            // Calculate final Y position for this strand
-            const y = centerY + (wave1 + wave2 + wave3) * smoothEnv + ribbonSpread;
+            const y = centerY + (wave1 + wave2 + wave3) * smoothEnv + norm * (48 * smoothEnv);
 
             if (isFirst) {
               ctx.moveTo(x, y);
@@ -122,11 +118,11 @@ export function SonicWaveformBackground({
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    animationFrameId = requestAnimationFrame(render);
 
     return () => {
-      observer.disconnect();
       window.removeEventListener("resize", handleResize);
+      observer.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
   }, [reduceMotion]);
@@ -134,11 +130,11 @@ export function SonicWaveformBackground({
   return (
     <div
       ref={containerRef}
-      className={`absolute inset-0 overflow-hidden pointer-events-none z-0 ${className}`}
+      className={`absolute inset-0 pointer-events-none overflow-hidden z-0 ${className}`}
       style={style}
       aria-hidden="true"
     >
-      <canvas ref={canvasRef} className="w-full h-full block" />
+      <canvas ref={canvasRef} className="block w-full h-full" />
     </div>
   );
 }

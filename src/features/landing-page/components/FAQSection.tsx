@@ -64,11 +64,11 @@ export function FAQSection() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-3xl mx-auto text-left mb-8 sm:mb-12"
       >
-        <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
+        <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black select-none mb-2.5">
           08 · FAQ
         </p>
         <h2
-          className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-black leading-[1.12] max-w-3xl"
+          className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.14] max-w-3xl"
           style={{ letterSpacing: "-0.035em" }}
         >
           Frequently Asked Questions

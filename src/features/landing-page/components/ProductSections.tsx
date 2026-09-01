@@ -62,16 +62,16 @@ export function DictationShowcase() {
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-5 text-left flex flex-col justify-center"
           >
-            <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
+            <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black select-none mb-2.5">
               03 · DICTATION
             </p>
             <h2
-              className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-black leading-[1.12]"
+              className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.14]"
               style={{ letterSpacing: "-0.035em" }}
             >
               Fast, accurate dictation anywhere.
             </h2>
-            <p className="text-neutral-600 text-base sm:text-lg mt-5 leading-relaxed font-normal max-w-md">
+            <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-3 leading-relaxed font-normal max-w-md">
               Speak naturally and Mello turns your words into text in the active field across your desktop.
             </p>
           </motion.div>
@@ -401,38 +401,7 @@ export function ActionsShowcase() {
   );
 }
 
-export function MeetingMode() {
-  return (
-    <section id="meeting" className="py-14 sm:py-20 bg-white text-black border-b border-neutral-200 overflow-hidden">
-      <div className="wrap max-w-5xl mx-auto px-4 sm:px-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="text-left max-w-4xl mb-8 sm:mb-12"
-        >
-          <p className="eyebrow text-xs font-mono font-bold tracking-[0.2em] uppercase text-black mb-3 select-none">
-            04 · MEETING MODE
-          </p>
-          <h2
-            className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-black leading-[1.12] max-w-3xl"
-            style={{ letterSpacing: "-0.035em" }}
-          >
-            No meeting bot. Just Mello on your desktop.
-          </h2>
-          <p className="text-neutral-600 text-sm sm:text-base lg:text-lg mt-4 leading-relaxed font-normal max-w-2xl">
-            Start Meeting Mode when you need it. Mello captures the conversation, keeps your notes together, and prepares a summary when you&apos;re done.
-          </p>
-        </motion.div>
-
-        <Reveal>
-          <MeetingModeAnimation />
-        </Reveal>
-      </div>
-    </section>
-  );
-}
+export { MeetingMode } from "@/components/sections/MeetingMode/MeetingModeSection";
 
 export function MemoryShowcase(){
   return (
